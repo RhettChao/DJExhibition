@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "填寫基本資料";
+}
+
+@section Styles {
+    <style>
+        .error {
+            border: 1px solid #b94a48!important;
+            background-color: #fee!important;
+        }
+        .div1 {
+            padding-bottom: 30px;
+        }
+    </style>
+}
+<div class="container div1">
+    <p class="text-center">
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">1.選擇身份/人數</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">2.選擇日期/時段</button>
+        <button type="button" class="btn btn-lg btn-success btStep">3.填寫基本資料</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">4.電子郵件認證</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">5.預約完成</button>
+    </p>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <form role="form" action="~/Reservation/Success" method="post" id="form1" class="form-horizontal">
+                <div class="form-group">
+                    <div class="alert alert-warning">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="member">訪客身分&人數</label>
+                                <input type="text" class="form-control input-lg" value="@ViewBag.Tourist" id="member" disabled>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="date">預約日期&時段</label>
+                                <input type="text" class="form-control input-lg" value="@ViewBag.ReservationDate" id="date" disabled>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group DivGroup">
+                    <label for="GroupName">團體名稱 <span class="badge">必填</span></label>
+                    <input type="text" class="form-control" id="GroupName" name="GroupName" placeholder="請輸入團體名稱"
+                        required data-msg-required="請輸入團體名稱！">
+                </div>
+               @* <div class="form-group DivGroup">
+                    <label for="GroupType">團體類別 <span class="badge">必填</span></label>
+                        <select class="form-control" id="GroupType" name="GroupType" title="請選擇團體類別！" data-content="請輸入團體類別" required>
+                            <option value=""></option>
+                            <option value="1">政府機關</option>
+                            <option value="2">民間團體</option>
+                            <option value="3">學校</option>
+                            <option value="99">其他</option>
+                        </select>
+                </div>*@
+                <div class="form-group">
+                    <label for="ContactName">聯絡人姓名 <span class="badge">必填</span></label>
+                    <input type="text" class="form-control" id="ContactName" name="ContactName" placeholder="請輸入聯絡人姓名"
+                        required data-msg-required="請輸入聯絡人姓名！">
+                </div>
+                <div class="form-group">
+                    <label for="ContactMobile">行動電話 <span class="badge">必填</span></label>
+                    <input type="text" class="form-control" id="ContactMobile" name="ContactMobile" placeholder="請輸入聯絡者行動電話" maxlength="10"
+                        required
+                        data-rule-digits="true"
+                        data-rule-minlength="10"
+                        data-msg-required="請輸入聯絡者行動電話！"
+                        data-msg-digits="行動電話格式有誤！"
+                        data-msg-minlength="行動電話格式有誤！">
+                </div>
+                <div class="form-group">
+                    <label for="ContactEmail">電子郵件 <span class="badge">必填</span> <span class="badge">系統將寄發認證信至此信箱</span></label>
+                    <input type="email" class="form-control" id="ContactEmail" name="ContactEmail" placeholder="請提供可接收之正確電子郵件信箱，以便完成預約程序！"
+                        required
+                        data-msg-required="請輸入聯絡者電子郵件！"
+                        data-msg-email="電子郵件格式有誤！">
+                </div>
+                <div class="form-group">
+                    <label for="ContactNote">備註</label>
+                    <textarea class="form-control" rows="3" id="ContactNote" name="ContactNote" placeholder="其他需服務事項"></textarea>
+                </div>
+                <h3 class="text-center">
+                    <button type="submit" class="btn btn-lg btn-primary cancel" id="BTPrev">&laquo; 上一步</button>
+                    <button type="button" class="btn btn-lg btn-danger" id="BTNext">確定預約</button>
+                </h3>
+                <input type="hidden" value="@ViewBag.TouristType" name="TouristType" id="TouristType" />
+                <input type="hidden" value="@ViewBag.TouristRange1" name="TouristRange1" id="TouristRange1" />
+                <input type="hidden" value="@ViewBag.TouristRange2" name="TouristRange2" id="TouristRange2" />
+                <input type="hidden" value="@ViewBag.ReservationBegin" name="ReservationBegin" id="ReservationBegin" />
+                <input type="hidden" value="@ViewBag.ReservationEnd" name="ReservationEnd" id="ReservationEnd" />
+                @*<input type="hidden" value="@ViewBag.GroupType" name="GroupType" id="GroupType" />*@
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("index.js")*@
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var type = '@ViewBag.TouristType';
+            if (type == "2") {
+                $('.DivGroup').show();
+            } else {
+                $('.DivGroup').hide();
+            }
+            
+            $('#BTPrev').click(function () {
+                $('#form1').attr('action', 'DateAndTime');
+                //$('#form1').submit();
+
+            });
+            $('#BTNext').click(function () {
+                $('#form1').attr('action', 'Success');
+                $('#form1').submit();
+                //$('#form1').validate();
+            });
+
+            $("form").validate({
+                showErrors: function (errorMap, errorList) {
+                    // Clean up any tooltips for valid elements
+                    $.each(this.validElements(), function (index, element) {
+                        var $element = $(element);
+
+                        $element.data("title", "") // Clear the title - there is no error associated anymore
+                            .removeClass("error")
+                            .tooltip("destroy");
+                    });
+                    // Create new tooltips for invalid elements
+                    $.each(errorList, function (index, error) {
+                        var $element = $(error.element);
+                        $element.tooltip("destroy") // Destroy any pre-existing tooltip so we can repopulate with new tooltip content
+                            .data("title", error.message)
+                            .addClass("error")
+                            .tooltip(); // Create a new tooltip based on the error messsage we just set in the title
+                    });
+                },
+                submitHandler: function (form) {                    
+                    form.submit();                    
+                }
+            });
+
+        });
+    </script>
+}
+

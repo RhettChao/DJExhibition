@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "ListNotAuth";
+}
+
+<h2>此帳號尚未通過管理者認證</h2>
+
+
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+{
+    @Html.AntiForgeryToken()
+    <h2 class="label label-success">@ViewBag.User </h2>    
+    <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary btn-xs">登出</a>
+}
+
+

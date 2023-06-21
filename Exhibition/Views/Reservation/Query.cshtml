@@ -1,0 +1,197 @@
+﻿@{
+    ViewBag.Title = "查詢預約資訊";
+}
+@section Styles {
+    <style>
+        #QueryResult {
+            margin-top: 10px;
+        }
+
+        .error {
+            border: 1px solid #b94a48!important;
+            background-color: #fee!important;
+        }
+
+        #QueryResult {
+            display: none;
+        }
+    </style>
+}
+<form>    
+    <h2 class="text-center">查詢預約資訊</h2>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="text-left form-group">
+                <div class="form-group">
+                    <label for="ContactName">預約代碼 <span class="badge">必填</span></label>
+                    <input type="text" class="form-control" id="Code" name="Code" placeholder="請輸入預約代碼" maxlength="5"
+                           rangelength="5,5"
+                           required
+                           data-msg-required="請輸入預約代碼！"
+                           data-msg-rangelength="請輸入五位數預約代碼！">
+                </div>
+                <div class="form-group">
+                    <label for="ContactEmail">電子郵件 <span class="badge">必填</span></label>
+                    <input type="email" class="form-control" id="ContactEmail" name="ContactEmail" placeholder="請輸入聯絡者電子郵件"
+                           required
+                           data-msg-required="請輸入聯絡者電子郵件！"
+                           data-msg-email="電子郵件格式有誤！">
+                </div>
+
+                <button type="submit" class="btn btn-lg btn-primary" id="BTQuery">查詢</button>
+
+                <div class="panel panel-default" id="QueryResult">
+                    <div class="panel-heading">
+                        <h3>查詢結果</h3>
+                        @*<span class="label label-primary"></span>*@
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal" id="dlResult">
+                        </dl>
+                        <button type="button" class="btn btn-lg btn-danger" id="BTCancel">取消預約</button>
+                    </div>
+                </div>
+            </div>
+            @* <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        &nbsp;
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                    <div class="panel-footer">&nbsp;</div>
+                </div>*@
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="//momentjs.com/downloads/moment.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#QueryResult').hide();
+
+
+            $("form").validate({
+                showErrors: function (errorMap, errorList) {
+                    // Clean up any tooltips for valid elements
+                    $.each(this.validElements(), function (index, element) {
+                        var $element = $(element);
+
+                        $element.data("title", "") // Clear the title - there is no error associated anymore
+                            .removeClass("error")
+                            .tooltip("destroy");
+                    });
+
+                    // Create new tooltips for invalid elements
+                    $.each(errorList, function (index, error) {
+                        var $element = $(error.element);
+
+                        $element.tooltip("destroy") // Destroy any pre-existing tooltip so we can repopulate with new tooltip content
+                            .data("title", error.message)
+                            .addClass("error")
+                            .tooltip(); // Create a new tooltip based on the error messsage we just set in the title
+                    });
+                },
+
+                submitHandler: function (form) {
+                    Query();
+                    //form.submit();
+                }
+            });
+
+            var gid;
+            function Query() {
+                gid = null;
+                $('#BTCancel').attr('disabled', 'disabled');
+                $('#QueryResult').hide();
+                $.ajax({
+                    url: 'QueryJS',
+                    dataType: 'json',
+                    data: {
+                        code: $('#Code').val(),
+                        email: $('#ContactEmail').val()
+                    },
+                    type: 'POST'
+                }).done(function (rows) {
+                    //if (rows.length == 1) {
+                    //} else {
+                    //    alert("查無資料");
+                    //}
+                    //var data = rows[0];
+                    var data = rows;
+                    if (data.StateCode == '30') {
+                        alert('此預約已取消！');
+                        return;
+                    }
+                    else if (data.StateCode == '10') {
+                        alert('請先完成預約認證程序！');
+                        return;
+                    }
+                    else {
+                        gid = data.ID;
+                        $('#BTCancel').removeAttr('disabled');
+                    }
+
+
+
+                    $('#QueryResult').show();
+                    $('#dlResult').html("");
+                    var group;
+                    //var range = '';
+                    if (data.TouristType == '1') {
+                        //range = data.TouristRange1;
+                        group = '';
+                    }
+                    else if (data.TouristType == '2') {
+                        //range = data.TouristRange1 + '~' + data.TouristRange2;
+                        group = '<dt>團體名稱：</dt><dd>' + data.GroupName + '</dd>';
+                    }
+                    var sn = '0000' + data.SN;
+                    sn = sn.substr(sn.length - 5, 5);
+                    var html =
+                        '<dt>預約代碼：</dt><dd>' + sn + '</dd>' +
+                        '<dt>預約日期：</dt><dd>' + moment(data.ReservationBegin).format("YYYY-MM-DD") + '</dd>' +
+                        '<dt>預約時段：</dt><dd>' + moment(data.ReservationBegin).format("HH:mm") + '~' + moment(data.ReservationEnd).format("HH:mm") + '</dd>' +
+                        '<dt>參觀人數：</dt><dd>' + data.TouristRange1 + '</dd>' +
+                        group +
+                        '<dt>聯絡人姓名：</dt><dd>' + data.ContactName + '</dd>' +
+                        '<dt>行動電話：</dt><dd>' + data.ContactMobile + '</dd>' +
+                        '<dt>電子郵件：</dt><dd>' + data.ContactEmail + '</dd>' +
+                        '<dt>備註：</dt><dd>' + (data.ContactNote || '') + '</dd>'
+                    ;
+                    $('#dlResult').html(html);
+
+
+
+                }).fail(function () {
+                    //alert("系統錯誤！");
+                    alert("查無資料");
+                });
+            }
+
+            $('#BTCancel').click(function () {
+                //alert(gid);
+                if (confirm('確定取消本次預約？')) {
+                    $.ajax({
+                        url: 'CancelReservation',
+                        dataType: 'json',
+                        data: {
+                            id: gid
+                        },
+                        type: 'POST'
+                    }).done(function (rows) {
+                        gid = null;
+                        $('#BTCancel').attr('disabled', 'disabled');
+                        alert('預約已取消！');
+                    }).fail(function () {
+                        alert("error!");
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+
+

@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "休館日期設定";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/Content/datepicker.css">
+    <style>
+        .SN {
+            cursor: pointer;
+        }
+
+        .add {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+}
+<h2 class="text-center">休館日期設定</h2>
+<div class="container">
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <form class="bs-example form-inline add text-right" role="form" id="form1">            
+            <div class="form-group">
+                @*<label for="offday">休館日期</label>*@
+                <input type="text" class="form-control" id="offday" placeholder="休館日(yyyy-mm-dd)"
+                     required title="請輸入休館日期！">
+            </div>
+            <div class="form-group">
+                @*<label for="title">標題</label>*@
+                <input type="text" class="form-control" id="title" placeholder="標題(選擇性輸入)" maxlength="10">
+            </div>            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" id="BTAdd">新增</button>
+            </div>
+        </form>
+
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">休館日清單</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>休館日</th>
+                            <th>標題</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody1">
+                    </tbody>
+                </table>
+                @*<ul class="list-group" id="listGroup">
+            <li class="list-group-item"></li>
+        </ul>*@
+            </div>
+            <div class="panel-footer">
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <h2 class="label label-success">@User.Identity.Name </h2>
+                    <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary btn-xs">登出</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+@section Scripts {
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    @*<script src="http://momentjs.com/downloads/moment.min.js"></script>*@
+    @Scripts.Render("~/Scripts/moment.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker.zh-TW.js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#offday').datepicker({
+                format: "yyyy/mm/dd",
+                language: "zh-TW"
+            });
+
+            $("#form1").validate({
+                showErrors: function (errorMap, errorList) {
+                    // Clean up any tooltips for valid elements
+                    $.each(this.validElements(), function (index, element) {
+                        var $element = $(element);
+
+                        $element.data("title", "") // Clear the title - there is no error associated anymore
+                            .removeClass("error")
+                            .tooltip("destroy");
+                    });
+
+                    // Create new tooltips for invalid elements
+                    $.each(errorList, function (index, error) {
+                        var $element = $(error.element);
+
+                        $element.tooltip("destroy") // Destroy any pre-existing tooltip so we can repopulate with new tooltip content
+                            .data("title", error.message)
+                            .addClass("error")
+                            .tooltip(); // Create a new tooltip based on the error messsage we just set in the title
+                    });
+                },
+
+                submitHandler: function (form) {
+                    //Query();
+                    //form.submit();
+                    AddDate();
+                }
+            });
+
+            GetList();
+            function GetList() {
+                $.ajax({
+                    url: 'OffdayList',
+                    dataType: 'json',
+                    type: 'POST'
+                }).done(function (rows) {
+                    $('#tbody1').html('');
+                    $.each(rows, function (key, value) {
+                        //$('#listGroup').append('<li class="list-group-item">'
+                        //    + '<button type="button" class="btn btn-danger btn-xs" id="BTAdd">刪除</button>'
+                        //    + ' '
+                        //    + moment(value.OffDate).format("YYYY-MM-DD ddd")
+                        //    + ' '
+                        //    + (value.Title || '')
+                        //    + '</li>');
+                        $('#tbody1').append(
+                            '<tr><td>'
+                            + '<button type="button" class="btn btn-danger btn-xs BTDel">刪除</button>'
+                            + '</td><td>'
+                            + moment(value.OffDate).format("YYYY-MM-DD")
+                            + '</td><td>'
+                            + (value.Title || '')
+                            + '</td></tr>');
+                    });
+                }
+                ).error(function () {
+                    alert("error!");
+                });
+            }
+
+            //$('#BTAdd').click(function () {
+            //    AddDate();
+            //});
+            function AddDate() {
+                var date = new Date($('#offday').val());
+                var title = $('#title').val().replace(' ', '');
+                $.ajax({
+                    url: 'OffdayAdd',
+                    dataType: 'json',
+                    data: {
+                        offDate: moment(date).format("YYYY-MM-DD"),
+                        title: title
+                    },
+                    type: 'POST'
+                }).done(function (rows) {
+                    //alert(typeof(rows));
+                    if (rows.toString() == '')
+                        alert('此日期已設定！');
+                    else
+                        GetList();
+                }
+                ).error(function () {
+                    alert("error!");
+                });
+            }
+
+            $('#tbody1').on('click', '.BTDel', function () {
+                var date = moment($(this).parent().next().text());
+
+                if (confirm('確定刪除本日記錄？\n' + moment(date).format("YYYY-MM-DD"))) {
+                    $.ajax({
+                        url: 'OffdayDelete',
+                        dataType: 'text',
+                        data: {
+                            offDate: moment(date).format("YYYY-MM-DD")
+                        },
+                        type: 'POST'
+                    }).done(function (txt) {
+                        if (txt == '1')
+                            GetList();
+                    }
+                    ).error(function () {
+                        alert("error!");
+                    });
+                }
+            });
+        });
+    </script>
+}

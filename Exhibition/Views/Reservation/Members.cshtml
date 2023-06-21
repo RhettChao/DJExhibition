@@ -1,0 +1,259 @@
+﻿@{
+    ViewBag.Title = "選擇身份/人數";
+}
+
+@section Styles {
+    @*<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.min.css">*@
+    <style>
+        .touristList {
+            /*width:120px;*/
+        }
+        #divMain {
+            display:none;
+        }
+    </style>
+}
+<form role="form" action="~/Reservation/DateAndTime" method="post">
+    @*<div class="jumbotron">*@
+    <div class="text-center">
+        @*<div class="container theme-showcase">*@
+        <p class="">
+            <button type="button" class="btn btn-lg btn-success btStep" >1.選擇身份/人數</button>
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">2.選擇日期/時段</button>            
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">3.填寫基本資料</button>
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">4.電子郵件認證</button>
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">5.預約完成</button>
+        </p>
+
+        <h3><span class="label label-warning" id="Begin">預約參觀注意事項</span></h3>
+        <div class="row" id="DivNote">
+            @*<div class="col-md-12">*@
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading text-center">
+                        <p class="text-left">歡迎您使用本館參觀預約系統。為了保護您以及本館雙方的權益，請您先詳細閱讀以下預約注意事項並於同意後勾選相關欄位，再進行後續預約步驟。</p>
+                    </div>
+                    @*<textarea class="form-control" rows="8">本系統提供之服務包括：線上預約、預約查詢、預約取消等。
+本系統24小時開放，提供3日起至60天內所有開館日預約參觀服務。
+為維護其他觀眾之權益，請勿重複預約；大量或多次預約而未到或未取消者，本館將取消其預約資格，且如因該筆預約肇致本館的損害及損失，您同意就本館損害或損失負完全賠償責任。
+線上預約區分為個人及團體，單一時段預約上限為30人，預約時須依不同之日期、時段、人數及類別進行選擇，並請詳實填寫相關基本資料。
+預約完成後，系統將自動寄發一預約確認信函至您所提供之電子郵件信箱中，內容包括預約代號等資料。
+請務必保留並牢記預約代號及相關參觀時間等資料，做為參觀報到、預約查詢及預約取消之依據。
+本系統提供預約查詢及預約取消之功能，欲修改參觀日期、時段、人數或類型者，須由預約確認信進入取消系統，取消原本預約之資料並重新預約。
+為維護每一位觀眾的參觀品質及權益，本館擁有拒絕超過預約人數之觀眾及車輛進入本館之權力。
+請於參觀前詳閱本館參觀注意事項，並轉知一同參觀之成員。為維護觀眾參觀品質，請遵守本館各項參觀規定，未遵守規定者，本館保留謝絕入館之權力。
+本館保留隨時修改注意事項之權力，修改後的條款將公佈於本網站上，不另外個別通知。如果您繼續在本網站進行參觀預約，就表示您已經了解、並同意遵守修改後的約定條款。                    
+                </textarea>*@
+                    <textarea class="form-control" rows="8">本系統提供之服務包括：線上預約、預約查詢、預約取消等。
+本系統24小時開放，提供10日起至40天內所有開館日預約參觀服務。
+為維護其他觀眾之權益，請勿重複預約；大量或多次預約而未到或未取消者，本館將取消其預約資格，且如因該筆預約肇致本館的損害及損失，您同意就本館損害或損失負完全賠償責任。
+團體線上預約單一時段以30人為原則，預約時須依不同日期、時段及人數進行選擇，並請詳實填寫相關基本資料。
+預約完成後，系統將自動寄發一預約確認信函至您所提供之電子郵件信箱中，其有效期限為24小時，請於時限內接收電子郵件並點選確認連結，已保留預約名額。
+確認信函內容包括預約代號等資料，請務必保留並牢記預約代號及相關參觀時間等資料，做為參觀報到、預約查詢及預約取消之依據。
+本系統提供 預約查詢/取消 之功能，欲修改任何預約資訊，請進入系統之 預約查詢/取消 功能，取消原本預約資料後再重新預約。
+為維護每一位觀眾的參觀品質及權益，本館擁有拒絕超過預約人數之觀眾及車輛進入本館之權力。
+請於參觀前詳閱本館參觀注意事項，並轉知一同參觀之成員。為維護觀眾參觀品質，請遵守本館各項參觀規定，未遵守規定者，本館保留謝絕入館之權力。
+本館保留隨時修改注意事項之權力，修改後的條款將公佈於本網站上，不另外個別通知。如果您繼續在本網站進行參觀預約，就表示您已經了解、並同意遵守修改後的約定條款。                    
+                </textarea>
+                </div>
+                <div class="checkbox-inline" id="divCheck">
+                    <label>
+                        <input type="checkbox" id="cbRead"> 我已閱讀以上事項並同意參觀須知
+                    </label>
+                </div>
+                @*<p>
+                <a class="btn btn-lg btn-primary disabled" href="~/Reservation/Members" id="linkBegin">開始預約 &raquo;</a>                
+            </p>*@
+            </div>
+        </div>
+
+
+        <div id="divMain" class="row">
+            <div class="">
+                @* <button type="button" class="btn btn-default btn-lg btn-block btRadio">個人</button>
+                <button type="button" class="btn btn-default btn-lg btn-block btRadio">團體(10人以上)</button>*@
+
+                @*<h3>請選擇參觀身份</h3>
+                <div class="well" style="max-width: 500px; margin: 0 auto 10px;" id="DivType" title="必填資訊" data-content="請選擇參觀身份">
+                    <button type="button" class="btn btn-default btn-lg btn-block GroupTouristType" id="BTIdv">個人</button>
+                    <button type="button" class="btn btn-default btn-lg btn-block GroupTouristType" id="BTGroup">團體</button>
+                </div>*@
+                <h3 id="TitleIdv">請選擇團體參觀人數</h3>
+                <div class="well" style="max-width: 500px; margin: 0 auto 10px;" id="DivNo" title="必填資訊" data-content="請選擇參觀人數">
+                   @* <div class="btn-group" data-toggle="buttons" id="BTType" title="必填資訊" data-content="請選擇參觀身份">
+                        <label class="btn btn-warning radios btn-lg" data-type="1">
+                            <input type="radio" name="options" id="option1" value="Idv" checked="checked">
+                            個人
+                        </label>
+                        <label class="btn btn-warning radios btn-lg" data-type="2">
+                            <input type="radio" name="options" id="option2" value="Group">
+                            團體
+                        </label>
+                    </div>*@
+                    <div id="NoList" style="display:none">
+                    <select class="form-control touristList" id="IdvNo" title="必填資訊" data-content="請選擇參觀人數">
+                        <option></option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                    </select>
+                    <select class="form-control touristList" id="GroupNo" title="必填資訊" data-content="請選擇參觀人數">
+                        <option></option>
+                        @*<option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>*@
+                        @*<option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>*@
+                        @*<option>15</option>
+                        <option>16</option>
+                        <option>17</option>
+                        <option>18</option>
+                        <option>19</option>*@
+                        <option>20</option>
+                        <option>21</option>
+                        <option>22</option>
+                        <option>23</option>
+                        <option>24</option>
+                        <option>25</option>
+                        <option>26</option>
+                        <option>27</option>
+                        <option>28</option>
+                        <option>29</option>
+                        <option>30</option>
+                    </select>
+                        </div>
+                </div>
+                @*<div class="btn-group">T
+        <button type="button" class="btn btn-default">個人人數</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" id="menuIndividualNo">
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+        </ul>
+    </div>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">團體人數 <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" id="menuGroupNo">
+        </ul>
+    </div>*@
+
+                @*<p><a class="btn btn-primary btn-lg" href="~/Reservation/Date" id="BTNext">下一步 &raquo;</a></p>*@
+                @*</div>*@
+
+                <h3 class="">
+                    <button type="submit" class="btn btn-lg btn-primary" id="BTNext">下一步 &raquo;</button>
+                </h3>
+            </div>
+        </div>
+        
+    </div>
+    <input type="hidden" value="2" name="TouristType" id="TouristType" />
+    <input type="hidden" value="" name="TouristRange1" id="TouristRange1" />
+    <input type="hidden" value="" name="TouristRange2" id="TouristRange2" />
+</form>
+@section Scripts {
+    @*<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {            
+            $('#cbRead').click(function () {
+                if ($('#cbRead:checked').length == 1)
+                    $('#divMain').fadeIn({
+                        complete: function () { $('#BTIdv').focus(); }
+                    });
+                else
+                    $('#divMain').fadeOut();
+            });
+
+            var withGroup = Boolean(@ViewBag.IsExhibitionAdmin);            
+
+            $('.GroupTouristType').click(function () {                
+                if ($(this).attr('id') == 'BTIdv') {
+                    $('#IdvNo').hide();
+                    $('#GroupNo').hide();
+                    $('#TouristType').val(1);
+                    $('#IdvNo').show();
+                    $('#NoList').show();                    
+                }
+                else if ($(this).attr('id') == 'BTGroup') {
+                    if (!withGroup) {
+                        alert("團體預約請來電洽詢！");
+                        return;
+                    }
+                    $('#IdvNo').hide();
+                    $('#GroupNo').hide();
+                    $('#TouristType').val(2);
+                    $('#GroupNo').show();
+                    $('#NoList').show();
+                }
+                $('.GroupTouristType').removeClass('btn-primary');
+                $(this).addClass('btn-primary');                
+            });
+
+            //only group reservation!
+            $('#IdvNo').hide();
+            $('#GroupNo').show();
+            $('#NoList').show();
+
+           
+            //$('#BTNext').click(function () {
+            //    $('#DivType').tooltip('destroy');
+            //    $('#DivNo').tooltip('destroy');
+            //    var valid = true;
+            //    if ($('#TouristType').val() == '') {
+            //        valid = false;
+            //        $('#DivType').tooltip('show');
+            //    }
+            //    $('#TouristRange1').val('');
+            //    $('#TouristRange2').val('');
+            //    if ($('#TouristType').val() == '1') {
+            //        $('#TouristRange1').val($('#IdvNo').val());
+            //        $('#TouristRange2').val($('#IdvNo').val());
+
+            //    } else if ($('#TouristType').val() == '2') {
+            //        $('#TouristRange1').val($('#GroupNo').val());
+            //        $('#TouristRange2').val($('#GroupNo').val());
+            //    }
+
+            //    if ($('#TouristRange1').val() == '' || $('#TouristRange2').val() == '') {
+            //        $('#DivNo').tooltip('show');
+            //        valid = false;
+            //    }
+                
+            //    return valid;
+            //});
+
+            $('#BTNext').click(function () {
+                $('#DivType').tooltip('destroy');
+                $('#DivNo').tooltip('destroy');
+                var valid = true;
+                $('#TouristRange1').val($('#GroupNo').val());
+                $('#TouristRange2').val($('#GroupNo').val());                
+
+                if ($('#TouristRange1').val() == '' || $('#TouristRange2').val() == '') {
+                    $('#DivNo').tooltip('show');
+                    valid = false;
+                }
+                return valid;
+            });
+
+        });
+    </script>
+}

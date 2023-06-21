@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SuhuaExhibitionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetUsers_Ext">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="RealName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RealEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
+          <Property Name="ReceiveCopy" Type="bit" />
+        </EntityType>
+        <EntityType Name="AuthLog">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Path" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserHost" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AuthDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Path" Type="nvarchar" MaxLength="200" />
+          <Property Name="Message" Type="nvarchar" MaxLength="500" />
+          <Property Name="Stack" Type="nvarchar" MaxLength="4000" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ErrorDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Holiday">
+          <Key>
+            <PropertyRef Name="OffDate" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateSource" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreateUserId" Type="int" />
+          <Property Name="OffDate" Type="datetime" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreateUserName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="RequestLog">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Path" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserHost" Type="nvarchar" MaxLength="100" />
+          <Property Name="RequestDate" Type="datetime" />
+          <Property Name="UserAgent" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Reservation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReservationBegin" Type="datetime" />
+          <Property Name="ReservationEnd" Type="datetime" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ContactMobile" Type="nvarchar" MaxLength="100" />
+          <Property Name="ContactEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="ContactNote" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="CreateSource" Type="nvarchar" MaxLength="100" />
+          <Property Name="ModifySource" Type="nvarchar" MaxLength="100" />
+          <Property Name="TouristType" Type="int" />
+          <Property Name="TouristRange1" Type="int" />
+          <Property Name="TouristRange2" Type="int" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="100" />
+          <Property Name="VerifyCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="VerifyDate" Type="datetime" />
+          <Property Name="DeleteDate" Type="datetime" />
+          <Property Name="GroupType" Type="int" />
+          <Property Name="TouristNo" Type="int" />
+          <Property Name="Note" Type="nvarchar" MaxLength="100" />
+          <Property Name="CancelDate" Type="datetime" />
+          <Property Name="CancelSource" Type="nvarchar" MaxLength="100" />
+          <Property Name="CancelUserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="StateCode" Type="int" />
+          <Property Name="CreateUserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="ModifyUserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="VerifyUserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="DeleteUserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="DeleteSource" Type="nvarchar" MaxLength="100" />
+          <Property Name="VerifySource" Type="nvarchar" MaxLength="100" />
+          <Property Name="NationForeigner" Type="int" />
+          <Property Name="NationNative" Type="int" />
+          <Property Name="MemberGov" Type="int" />
+          <Property Name="MemberNGO" Type="int" />
+          <Property Name="MemberEdu" Type="int" />
+          <Property Name="MemberOther" Type="int" />
+          <Property Name="TourNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="TourLeader" Type="nvarchar" MaxLength="100" />
+          <Property Name="TourGuide" Type="nvarchar" MaxLength="100" />
+          <Property Name="TourField" Type="nvarchar" MaxLength="100" />
+          <Property Name="AuthDate" Type="datetime" />
+          <Property Name="AuthUserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="AuthSource" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SystemCode">
+          <Key>
+            <PropertyRef Name="Type" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Type" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityContainer Name="SuhuaExhibitionModelStoreContainer">
+          <EntitySet Name="AspNetUsers_Ext" EntityType="Self.AspNetUsers_Ext" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuthLog" EntityType="Self.AuthLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Holiday" EntityType="Self.Holiday" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RequestLog" EntityType="Self.RequestLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reservation" EntityType="Self.Reservation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemCode" EntityType="Self.SystemCode" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SuhuaExhibitionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AspNetUsers_Ext">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RealName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RealEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiveCopy" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Path" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Stack" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ErrorDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Holiday">
+          <Key>
+            <PropertyRef Name="OffDate" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateSource" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreateUserId" Type="Int32" />
+          <Property Name="OffDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreateUserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RequestLog">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Path" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserHost" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RequestDate" Type="DateTime" Precision="3" />
+          <Property Name="UserAgent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SystemCode">
+          <Key>
+            <PropertyRef Name="Type" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Type" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetUsers_Ext" EntityType="Self.AspNetUsers_Ext" />
+          <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" />
+          <EntitySet Name="Holiday" EntityType="Self.Holiday" />
+          <EntitySet Name="RequestLog" EntityType="Self.RequestLog" />
+          <EntitySet Name="SystemCode" EntityType="Self.SystemCode" />
+          <EntitySet Name="Reservation" EntityType="SuhuaExhibitionModel.Reservation" />
+          <EntitySet Name="AuthLog" EntityType="SuhuaExhibitionModel.AuthLog" />
+        </EntityContainer>
+        <EntityType Name="Reservation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="ReservationBegin" Type="DateTime" Precision="3" />
+          <Property Name="ReservationEnd" Type="DateTime" Precision="3" />
+          <Property Name="ContactName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ContactMobile" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ContactEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNote" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateSource" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ModifySource" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TouristType" Type="Int32" />
+          <Property Name="TouristRange1" Type="Int32" />
+          <Property Name="TouristRange2" Type="Int32" />
+          <Property Name="GroupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="VerifyCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="VerifyDate" Type="DateTime" Precision="3" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <Property Name="GroupType" Type="Int32" />
+          <Property Name="TouristNo" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CancelDate" Type="DateTime" Precision="3" />
+          <Property Name="CancelSource" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CancelUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="StateCode" Type="Int32" />
+          <Property Name="CreateUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="VerifyUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteSource" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="VerifySource" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NationForeigner" Type="Int32" />
+          <Property Name="NationNative" Type="Int32" />
+          <Property Name="MemberGov" Type="Int32" />
+          <Property Name="MemberNGO" Type="Int32" />
+          <Property Name="MemberEdu" Type="Int32" />
+          <Property Name="MemberOther" Type="Int32" />
+          <Property Name="TourNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TourLeader" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TourGuide" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TourField" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AuthDate" Type="DateTime" Precision="3" />
+          <Property Name="AuthUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AuthSource" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AuthLog">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Path" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserHost" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AuthDate" Type="DateTime" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SuhuaExhibitionModelStoreContainer" CdmEntityContainer="DatabaseEntities">
+          <EntitySetMapping Name="AspNetUsers_Ext">
+            <EntityTypeMapping TypeName="SuhuaExhibitionModel.AspNetUsers_Ext">
+              <MappingFragment StoreEntitySet="AspNetUsers_Ext">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RealName" ColumnName="RealName" />
+                <ScalarProperty Name="RealEmail" ColumnName="RealEmail" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="ReceiveCopy" ColumnName="ReceiveCopy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ErrorLog">
+            <EntityTypeMapping TypeName="SuhuaExhibitionModel.ErrorLog">
+              <MappingFragment StoreEntitySet="ErrorLog">
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Stack" ColumnName="Stack" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ErrorDate" ColumnName="ErrorDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Holiday">
+            <EntityTypeMapping TypeName="SuhuaExhibitionModel.Holiday">
+              <MappingFragment StoreEntitySet="Holiday">
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateSource" ColumnName="CreateSource" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="OffDate" ColumnName="OffDate" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CreateUserName" ColumnName="CreateUserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequestLog">
+            <EntityTypeMapping TypeName="SuhuaExhibitionModel.RequestLog">
+              <MappingFragment StoreEntitySet="RequestLog">
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="UserHost" ColumnName="UserHost" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="UserAgent" ColumnName="UserAgent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemCode">
+            <EntityTypeMapping TypeName="SuhuaExhibitionModel.SystemCode">
+              <MappingFragment StoreEntitySet="SystemCode">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reservation">
+            <EntityTypeMapping TypeName="SuhuaExhibitionModel.Reservation">
+              <MappingFragment StoreEntitySet="Reservation">
+                <ScalarProperty Name="AuthSource" ColumnName="AuthSource" />
+                <ScalarProperty Name="AuthUserId" ColumnName="AuthUserId" />
+                <ScalarProperty Name="AuthDate" ColumnName="AuthDate" />
+                <ScalarProperty Name="TourField" ColumnName="TourField" />
+                <ScalarProperty Name="TourGuide" ColumnName="TourGuide" />
+                <ScalarProperty Name="TourLeader" ColumnName="TourLeader" />
+                <ScalarProperty Name="TourNo" ColumnName="TourNo" />
+                <ScalarProperty Name="MemberOther" ColumnName="MemberOther" />
+                <ScalarProperty Name="MemberEdu" ColumnName="MemberEdu" />
+                <ScalarProperty Name="MemberNGO" ColumnName="MemberNGO" />
+                <ScalarProperty Name="MemberGov" ColumnName="MemberGov" />
+                <ScalarProperty Name="NationNative" ColumnName="NationNative" />
+                <ScalarProperty Name="NationForeigner" ColumnName="NationForeigner" />
+                <ScalarProperty Name="VerifySource" ColumnName="VerifySource" />
+                <ScalarProperty Name="DeleteSource" ColumnName="DeleteSource" />
+                <ScalarProperty Name="DeleteUserId" ColumnName="DeleteUserId" />
+                <ScalarProperty Name="VerifyUserId" ColumnName="VerifyUserId" />
+                <ScalarProperty Name="ModifyUserId" ColumnName="ModifyUserId" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+                <ScalarProperty Name="CancelUserId" ColumnName="CancelUserId" />
+                <ScalarProperty Name="CancelSource" ColumnName="CancelSource" />
+                <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="TouristNo" ColumnName="TouristNo" />
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+                <ScalarProperty Name="VerifyDate" ColumnName="VerifyDate" />
+                <ScalarProperty Name="VerifyCode" ColumnName="VerifyCode" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="TouristRange2" ColumnName="TouristRange2" />
+                <ScalarProperty Name="TouristRange1" ColumnName="TouristRange1" />
+                <ScalarProperty Name="TouristType" ColumnName="TouristType" />
+                <ScalarProperty Name="ModifySource" ColumnName="ModifySource" />
+                <ScalarProperty Name="CreateSource" ColumnName="CreateSource" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ContactNote" ColumnName="ContactNote" />
+                <ScalarProperty Name="ContactEmail" ColumnName="ContactEmail" />
+                <ScalarProperty Name="ContactMobile" ColumnName="ContactMobile" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="ReservationEnd" ColumnName="ReservationEnd" />
+                <ScalarProperty Name="ReservationBegin" ColumnName="ReservationBegin" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuthLog">
+            <EntityTypeMapping TypeName="SuhuaExhibitionModel.AuthLog">
+              <MappingFragment StoreEntitySet="AuthLog">
+                <ScalarProperty Name="AuthDate" ColumnName="AuthDate" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserHost" ColumnName="UserHost" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

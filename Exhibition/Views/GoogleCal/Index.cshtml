@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "GoogleCalendar";
+}
+
+@section Styles {
+    <style>
+        h4 {
+            margin-top:20px;
+            margin-bottom:20px;
+        }
+    </style>
+}
+
+@*<h2>Google Calendar</h2>*@
+<h2>淡江大橋願景館 - Google 行事曆</h2>
+<h4>
+    如您有使用 <a href="https://www.google.com/calendar" target="GoogleCalendar">Google行事曆</a>，可於此訂閱淡江大橋願景館行事曆，日後已核准之預約資訊將自動新增於您的行事曆中。
+</h4>
+<p>
+    @*(如第一次使用將進行Google驗證程序)*@
+</p>
+
+<button class="btn btn-primary btn-lg" type="submit" id="Subscribe">訂閱</button>
+&nbsp;&nbsp;
+<button class="btn btn-primary btn-lg" type="submit" id="Unsubscribe">取消</button>
+
+
+<h3>( 目前狀態：<span id="Status">@ViewBag.Status</span> )</h3>
+
+
+@*<a href="~/GoogleCal/Subscribe" class="btn btn-primary btn-lg">訂閱</a>
+&nbsp;&nbsp;
+<a href="~/GoogleCal/Unsubscribe" class="btn btn-primary btn-lg">取消</a>*@
+
+
+@*<h2>已訂閱項目</h2>
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            @item.Summary - @item.Selected
+        </li>
+    }
+</ul>*@
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Subscribe').click(function () {
+                $.ajax({
+                    url: '@Url.Content("~/GoogleCal/Subscribe")',
+                    cache: false
+                }).done(function (data) {
+                    if (data == "1") {
+                        $('#Status').text('已訂閱');
+                        alert("訂閱成功！");
+                    } else if (data == "0") {
+                        alert("目前已訂閱中！");
+                    }
+                }).error(function () {
+                    alert("訂閱失敗！");
+                });
+            });
+            $('#Unsubscribe').click(function () {
+                $.ajax({
+                    url: '@Url.Content("~/GoogleCal/Unsubscribe")',
+                    cache: false
+                }).done(function (data) {
+                    if (data == "1") {
+                        $('#Status').text('未訂閱');
+                        alert("取消訂閱成功！");
+                    } else if (data == "0") {
+                        alert("目前非訂閱中！");
+                    }
+                }).error(function () {
+                    alert("取消訂閱失敗！");
+                });
+            });
+        });
+    </script>
+
+    }

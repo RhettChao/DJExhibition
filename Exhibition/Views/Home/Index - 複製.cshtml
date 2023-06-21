@@ -1,0 +1,267 @@
+﻿@{
+    ViewBag.Title = "淡江大橋願景館 線上預約";
+    Layout = "~/Views/Shared/_LayoutCarousel.cshtml";
+}
+@section Styles {
+    <style>
+        #divCheck {
+            color: white;
+        }
+
+        .Container {
+            color: white;
+        }
+
+        .DivNote {
+            background-color: black;
+            color: white;
+        }
+
+        .listRule div {
+            margin-top: 13px;
+            font-size: 15px;
+        }
+
+        p {
+            font-size: 15px;
+        }
+
+        .modal-content {
+            width: 550px;
+            height: 490px;
+        }
+
+        #map_canvas {
+            width: 550px;
+            height: 420px;
+        }
+
+        #linkMap {
+            cursor: pointer;
+        }
+        /*#myModal {
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+        }*/
+    </style>
+}
+@*<div class="jumbotron">*@
+<div class="Container">
+    @* <div class="row">
+            最新參觀統計：
+                <span class="badge groups"></span>梯次
+                <span class="badge tourists"></span>人次
+        </div>*@
+    <div class="row">
+        @*<div class="col-md-1"></div>*@
+        <div class="col-md-4">
+            <div class="">
+                <div class="caption">
+                    <h3><span class="label label-warning">系統公告</span></h3>
+
+                    <h4>本館暫停開放：</h4>
+                    <h4><span class="glyphicon glyphicon-time"></span> <span class="text-danger">109-03-20 起暫停線上預約</span></h4>
+                    <p class="text-danger" style="margin-bottom:30px">因應新冠肺炎防疫期間，本館暫停開放。</p>
+                    
+                    <h4>線上預約開放：</h4>
+                    @*<h4><span class="glyphicon glyphicon-time"></span> 2013-12-24 起開放線上預約</h4>
+        <p>配合願景館開幕，預計自2013-12-24起開放線上預約。</p>*@
+                    <h4><span class="glyphicon glyphicon-time"></span> 109-01-22 起開放線上預約</h4>
+                    <p>願景館預計109-02-04(二)開幕，系統將於109-01-22起開放線上預約。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="listRule">
+                <h3><span class="label label-warning">預約規則</span></h3>
+                @*<div><span class="label label-default">1</span> 僅開放團體(15~30人)預約後參觀</div>
+                <div><span class="label label-default">2</span> 參觀時間為每週一、二、三、四、五</div>
+                <div><span class="label label-default">3</span> 參觀時段區分為上午、下午各一梯次</div>
+                <div><span class="label label-default">4</span> 每梯次參觀人數以30人為原則</div>
+                <div><span class="label label-default">5</span> 開放未來10~60天內之預約</div>
+                <div><span class="label label-default">6</span> 公告休館日及國定例假日休館</div>*@
+                <div><span class="label label-default">1</span> 僅開放團體(20~30人)預約後參觀</div>
+                <div><span class="label label-default">2</span> 參觀時間為每週二、三、四、五<br>上午(9:30~10:30)、下午(14:00~15:00)</div>
+                <div><span class="label label-default">3</span> 開放未來10~40天內之預約</div>
+                <div><span class="label label-default">4</span> 本館以中文導覽，其他語言導覽(台語、日本語、英語及西班牙語等)採QRcode掃描語音說明</div>
+                <div><span class="label label-default">5</span> 公告休館日(每週一)及國定例假日休館</div>                
+            </div>
+        </div>
+        @*<div class="col-md-1"></div>*@
+        <div class="col-md-4">
+            <div class="listInfo">
+                @*<img src="~/Images/Suhua/suhua.11.png" alt="...">*@
+
+                <h3><span class="label label-warning">展館資訊</span></h3>
+                <h4>參觀時間：</h4>
+                <p>
+                    週二至週五（休館日除外)
+                    <br>上午 9:30~10:30 &nbsp; 下午 14:00~15:00
+                </p>
+
+                @*<h4>館址：</h4>
+                    <p>270宜蘭縣蘇澳鎮永春路28-1號</p>
+                    <h4>連絡電話：</h4>
+                    <p>03-9592000#139 黃琳婷 工程司</p>
+                    <h4>電子郵件：</h4>
+                    <p><a href="mailto:amneda@gmail.com">amneda@gmail.com</a></p>*@
+
+                <h4>連絡資訊：</h4>
+                <address>
+                    <span class="glyphicon glyphicon-home"></span> <abbr title="願景館地址">館址</abbr>：
+                    <a id="linkMap">@*<strong>270</strong>*@ 新北市八里區文昌一街9之2號 <img src="~/Images/map.png" width="20" /></a> <br>
+                    <span class="glyphicon glyphicon-phone-alt"></span> <abbr title="預約洽詢電話">電話</abbr>：
+                    (02) 8954-1626 @*分機139*@
+                </address>
+                <address>
+                    <strong>鍾宗穎 工程司</strong><br>
+                    <span class="glyphicon glyphicon-envelope"></span> <a href="mailto:juningchung@thb.gov.tw">juningchung@thb.gov.tw</a>
+                </address>
+            </div>
+        </div>
+    </div>
+
+    @* <div class="row text-left">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <h3 id="Begin">預約規則</h3>
+                    </div>
+                    <!--<div class="panel-body"></div>-->
+                    <!-- List group -->
+                    <ul class="list-group compact">
+                        <li class="list-group-item"><span class="label label-default">1</span> 開放未來3~60天內之預約</li>
+                        <li class="list-group-item"><span class="label label-default">2</span> 參觀時段區分為上午、下午各一梯次</li>
+                        <li class="list-group-item"><span class="label label-default">3</span> 每梯次參觀人數上限30人</li>
+                        <li class="list-group-item"><span class="label label-default">4</span> 個人參觀時間為每周五</li>
+                        <li class="list-group-item"><span class="label label-default">5</span> 團體參觀時間為每周一~周四(請來電洽詢)</li>
+                        <li class="list-group-item"><span class="label label-default">6</span> 公告休館日及國定例假日休館</li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>*@
+
+    @*<div class="row" id="DivNote">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading text-center">
+                            <h3><span class="label label-warning" id="Begin">預約參觀注意事項</span></h3>
+                            <p class="text-left">歡迎您使用本館參觀預約系統。為了保護您以及本館雙方的權益，請您先詳細閱讀以下預約注意事項並於同意後勾選相關欄位，再進行後續預約步驟。</p>
+                        </div>
+                        <textarea class="form-control" rows="8">本系統提供之服務包括：線上預約、預約查詢、預約取消等。
+        本系統24小時開放，提供3日起至60天內所有開館日預約參觀服務。
+        為維護其他觀眾之權益，請勿重複預約；大量或多次預約而未到或未取消者，本館將取消其預約資格，且如因該筆預約肇致本館的損害及損失，您同意就本館損害或損失負完全賠償責任。
+        線上預約區分為個人及團體，單一時段預約上限為30人，預約時須依不同之日期、時段、人數及類別進行選擇，並請詳實填寫相關基本資料。
+        預約完成後，系統將自動寄發一預約確認信函至您所提供之電子郵件信箱中，內容包括預約代號等資料。
+        請務必保留並牢記預約代號及相關參觀時間等資料，做為參觀報到、預約查詢及預約取消之依據。
+        本系統提供預約查詢及預約取消之功能，欲修改參觀日期、時段、人數或類型者，須由預約確認信進入取消系統，取消原本預約之資料並重新預約。<!--團體預約者如欲取消，請電洽博物館客服人員。-->
+        為維護每一位觀眾的參觀品質及權益，本館擁有拒絕超過預約人數之觀眾及車輛進入本館之權力。
+        請於參觀前詳閱本館參觀注意事項，並轉知一同參觀之成員。為維護觀眾參觀品質，請遵守本館各項參觀規定，未遵守規定者，本館保留謝絕入館之權力。
+        本館保留隨時修改注意事項之權力，修改後的條款將公佈於本網站上，不另外個別通知。如果您繼續在本網站進行參觀預約，就表示您已經了解、並同意遵守修改後的約定條款。
+                        </textarea>
+                    </div>
+                    <div class="checkbox" id="divCheck">
+                        <label>
+                            <input type="checkbox" id="cbRead">我已閱讀以上事項並同意參觀須知
+                        </label>
+                    </div>
+                    <p>
+                        <a class="btn btn-lg btn-primary disabled" href="~/Reservation/Members" id="linkBegin">開始預約 &raquo;</a>
+                    </p>
+                </div>
+            </div>*@
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">願景館地圖</h4>
+                </div>*@
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                <div class="google-map-canvas">
+                    <div id="map_canvas" class="img-responsive">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("index.js")*@
+    @*<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAOaCxOyydnUGAPpYXLQTEt0dirKx3LauY&sensor=false"></script>*@
+    @*<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCEYYUw0aOWKjY_bj4OzvmuBnTiS2llG0g&sensor=false"></script>*@
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCEYYUw0aOWKjY_bj4OzvmuBnTiS2llG0g"></script>
+    @*<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.carousel').carousel({
+                interval: 4000
+            });
+            $('#cbRead').click(function () {
+                if ($('#cbRead:checked').length == 1)
+                    $('#linkBegin').removeClass('disabled');
+                else
+                    $('#linkBegin').addClass('disabled');
+            });
+            var map;
+            function initialize() {
+                //var myLatlng = new google.maps.LatLng(24.590393, 121.850931);
+                var myLatlng = new google.maps.LatLng(25.156587, 121.410682);
+                var centerLatlng = new google.maps.LatLng(24.810421, 121.505828);
+                var mapOptions = {
+                    //center: new google.maps.LatLng(-34.397, 150.644),
+                    center: centerLatlng,
+                    zoom: 9,
+                    //MapTypeId.ROADMAP 會顯示預設道路地圖檢視畫面
+                    //MapTypeId.SATELLITE 會顯示 Google 地球衛星影像
+                    //MapTypeId.HYBRID 會顯示一般檢視和衛星檢視的混合畫面
+                    //MapTypeId.TERRAIN 會根據地形資訊顯示實際地圖
+                    //mapTypeId: google.maps.MapTypeId.ROADMAP
+                    //mapTypeId: google.maps.MapTypeId.TERRAIN
+                    mapTypeId: google.maps.MapTypeId.HYBRID
+                };
+                map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: "淡江大橋願景館",
+                    animation: google.maps.Animation.DROP
+                });
+                var infoWindow = new google.maps.InfoWindow;
+                infoWindow.setContent('<h4>淡江大橋願景館</h4>' + '<p>新北市八里區文昌一街9之2號</p><p>(02)8954-1626</p>');
+                var onMarkerClick = function () {
+                    var marker = this;
+                    var latLng = marker.getPosition();
+                    infoWindow.open(map, marker);
+                };
+                google.maps.event.addListener(map, 'click', function () {
+                    infoWindow.close();
+                });
+                google.maps.event.addListener(marker, 'click', onMarkerClick);
+                google.maps.event.addListenerOnce(map, 'tilesloaded', function () {
+                    infoWindow.open(map, marker);
+                });
+            }
+            //google.maps.event.addDomListener(window, 'load', initialize);
+            $('#linkMap').click(function () {
+                //$('#myModal').fadeIn();
+                $('#myModal').modal();
+            });
+            $('#myModal').on('shown.bs.modal', function () {
+                initialize();
+            })
+        });
+    </script>
+}
+

@@ -1,0 +1,56 @@
+﻿@model Exhibition.Models.Reservation
+@{
+    ViewBag.Title = "電子郵件認證";
+}
+<div class="container">
+    <p class="text-center">
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">1.選擇身份/人數</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">2.選擇日期/時段</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">3.填寫基本資料</button>
+        <button type="button" class="btn btn-lg btn-success btStep" >4.電子郵件認證</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">5.預約完成</button>
+    </p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>
+                <span class="label label-primary">@ViewBag.Msg</span></h2>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>預約代碼：</dt>                
+                <dd>@ViewBag.ReservationCode</dd>
+                <dt>預約日期：</dt>
+                <dd>@String.Format("{0}{1:-MM-dd}", Model.ReservationBegin.Value.Year-1911, Model.ReservationBegin)</dd>
+                <dt>預約時段：</dt>
+                @*<dd>@String.Format("{0:HH:mm} ~ {1:HH:mm}", Model.ReservationBegin, Model.ReservationEnd)</dd>*@
+                <dd>@ViewBag.Time</dd>
+                <dt>參觀人數：</dt>
+                <dd>@Model.TouristRange1</dd>
+                <dt class="groupName">團體名稱：</dt>
+                <dd class="groupName">@Html.DisplayTextFor(m => m.GroupName)</dd>
+                <dt>聯絡人姓名：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactName)</dd>
+                <dt>行動電話：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactMobile)</dd>
+                <dt>電子郵件：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactEmail)</dd>
+                <dt>備註：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactNote)</dd>
+            </dl>
+            <h3>系統已發出確認信至您的電子郵件信箱：@Model.ContactEmail</h3>
+            <h3>請接收確認信件以完成預約流程！</h3>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var groupName = '@Model.GroupName';
+            if (groupName.length == 0) {
+                $('.groupName').hide();
+            }
+        });
+    </script>
+}
+

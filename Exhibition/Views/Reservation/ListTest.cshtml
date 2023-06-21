@@ -1,0 +1,749 @@
+﻿@{
+    ViewBag.Title = "預約清單";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/Content/datepicker.css">
+    @*<link href="//datatables.net/release-datatables/media/css/demo_table_jui.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    @*<link href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css" rel="stylesheet" />*@
+
+    <style>
+        .colSN {
+            /*cursor: pointer;*/
+            text-align: center;
+        }
+
+        .TRHide {
+            display: none;
+        }
+
+        .TRSet {
+            /*background-color:#EBEBEB;*/
+            background-color: #f4f8fa;
+        }
+
+        .tableMember {
+            text-align: center;
+        }
+
+            .tableMember th {
+                text-align: center;
+                font-weight: normal;
+            }
+        /*.sorting_1 {
+            background-color:red;            
+        }*/
+        /*table.dataTable tr.odd td.sorting_1 {
+            background-color: white;
+        }*/
+        .panel-default {
+            background-color: #f4f8fa;
+            /*background-color:#bce8f1;*/
+        }
+
+        .CBCancel {
+            font-weight: normal;
+        }
+
+        .area1 {
+            border: 0px solid;
+            padding: 0px 0px 0px 0px;
+            background-color: transparent;
+        }
+
+        #divDate {
+            /*height:300px;*/
+            background-color: #f4f8fa;
+        }
+
+        #ReservationBeginNew {
+            margin: 10px 0px 5px 0px;
+        }
+    </style>
+}
+<div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body modalDate">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                <h4>變更預約日期</h4>
+                <div id="divDate"></div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control text-center" id="ReservationBeginNew" readonly>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="div1">Hello</div>
+<button id="BTTest" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-hand-up"></span>TEST</button>
+
+
+<h2 class="text-center">預約清單</h2>
+@*<div class="text-center"><button id="BTAdd" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-hand-up"></span> 新增預約記錄</button></div>*@
+<table class="table table-condensed table-striped table-hover" id="tableJS">
+    @*<table class="display dataTable" id="tableJS">*@
+</table>
+
+<div class="row">&nbsp;</div>
+<div class="row">&nbsp;</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section Scripts {
+    @*<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>*@
+    @*<script src="http://momentjs.com/downloads/moment.min.js"></script>*@
+    @*<script src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.0/numeral.min.js"></script>*@
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    @*<script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>*@
+
+    @Scripts.Render("~/Scripts/moment.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker.zh-TW.js")
+    <script type="text/javascript">
+        var timeAM_1 = '10:00';
+        var timeAM_2 = '12:00';
+        var timePM_1 = '13:10';
+        var timePM_2 = '16:00';
+
+        $(document).ready(function () {
+            $('#BTTest').click(function () {
+                $('#div1').css('height', '3000px');
+            });
+
+
+            //var colState;
+            var aPos = -1;
+            $('#tableJS').on("click", "tbody tr", function () {
+                aPos = table1.fnGetPosition(this);
+            });
+
+            $('#tableJS').on("click", ".SN", function () {
+                //colState = $(this).parent().parent().find('.colState').eq(0);                
+                var sn = Number($(this).text());
+                GetRowData(sn);
+                $('#myModal').modal();
+            });
+
+
+            $('#dateModal').on('shown.bs.modal', function (e) {
+                //$('#offday').datepicker({
+                //    format: "yyyy/mm/dd",
+                //    language: "zh-TW"
+                //});
+                var date = moment($('#ReservationBegin').val());
+                //$('#optionsAm').attr('checked', false);
+                //$('#optionsPm').attr('checked', false);
+
+                if (date.hour() < 12)
+                    $('#optionsAm').prop('checked', true);
+                    //$("input[name=optionsTime]").val('am');
+                else
+                    $('#optionsPm').prop('checked', true);
+                //$("input[name=optionsTime]").val('pm');
+                $('#ReservationBeginNew').val(date.format('YYYY-MM-DD'));
+                $('#divDate').datepicker('update', date.format('YYYY-MM-DD'));
+            })
+
+            var today = new Date();
+
+            //$('#divDate').datepicker({
+            //    language: "zh-TW",
+            //    startDate: today
+            //}).on('changeDate', function (e) {
+            //    //alert(e.date);                
+            //    $('#ReservationBeginNew').val(moment(e.date).format("YYYY-MM-DD"));
+            //    //var newDate = new Date(e.date);                
+            //});
+
+            $('#BTSaveDate').click(function () {
+                //var date1 = moment($('#ReservationBeginNew').val());
+                //var date2 = moment($('#ReservationBeginNew').val());
+                var time = $("input[name=optionsTime]:checked").val();
+                var dateStr1, dateStr2;
+                if (time == "am") {
+                    //dateStr1 = calEvent.start.getFullYear() + '-' + (calEvent.start.getMonth() + 1) + '-' + calEvent.start.getDate() + ' ' + timeAM_1;
+                    //dateStr2 = calEvent.start.getFullYear() + '-' + (calEvent.start.getMonth() + 1) + '-' + calEvent.start.getDate() + ' ' + timeAM_2;
+
+                    //date1 = moment($('#ReservationBeginNew').val() + ' ' + timeAM_1);
+                    //date2 = moment($('#ReservationBeginNew').val() + ' ' + timeAM_2);
+
+                    dateStr1 = $('#ReservationBeginNew').val() + ' ' + timeAM_1;
+                    dateStr2 = $('#ReservationBeginNew').val() + ' ' + timeAM_2;
+
+                } else if (time == "pm") {
+                    //dateStr1 = calEvent.start.getFullYear() + '-' + (calEvent.start.getMonth() + 1) + '-' + calEvent.start.getDate() + ' ' + timePM_1;
+                    //dateStr2 = calEvent.start.getFullYear() + '-' + (calEvent.start.getMonth() + 1) + '-' + calEvent.start.getDate() + ' ' + timePM_2;
+
+                    //date1 = moment($('#ReservationBeginNew').val() + ' ' + timePM_1);
+                    //date2 = moment($('#ReservationBeginNew').val() + ' ' + timePM_2);
+
+                    dateStr1 = $('#ReservationBeginNew').val() + ' ' + timePM_1;
+                    dateStr2 = $('#ReservationBeginNew').val() + ' ' + timePM_2;
+                }
+
+                if (confirm('確定變更預約日期？(※請自行確認該時段是否衝突※)')) {
+                    var id = $('#ID').val();
+                    var sn = $('#SN').val();
+                    $.ajax({
+                        url: 'ChangeReservationDate',
+                        dataType: 'json',
+                        data: {
+                            id: id,
+                            begin: dateStr1,
+                            end: dateStr2
+                        },
+                        type: 'POST'
+                    }).done(function (rows) {
+                        GetRowData(sn);
+                        UpdateTableRow();
+                        alert('變更成功！');
+                        $('#dateModal').modal('hide');
+                    }).fail(function () {
+                        alert("error!");
+                    });
+                }
+            });
+
+            //$('#d1 .input-group.date').datepicker({
+            //    language: "zh-TW"
+            //});
+
+            //$('#tableJS').on("click", "td", function () {
+
+            // Get the position of the current data from the node
+            //var aPos = table1.fnGetPosition(this);
+            // Get the data array for this row
+
+            //var aData = table1.fnGetData(0, 1);
+            //alert(aData);             
+
+
+            // Update the data array and return the value
+            //aData[aPos[1]] = 'clicked';
+            //this.innerHTML = 'clicked';
+            //});
+
+            var rowStateCode;
+            function GetRowData(sn) {
+                $.ajax({
+                    url: 'ListSingle',
+                    dataType: 'json',
+                    data: {
+                        sn: sn
+                    },
+                    type: 'POST'
+                }).done(function (rows) {
+                    if (rows.length == 1) {
+                        $('.readData').show();
+                        $('.editData').hide();
+
+                        var data = rows[0];
+                        var type;
+                        //var range = '';
+                        if (data.TouristType == '1') {
+                            //range = data.TouristRange1;
+                            type = '個人';
+                            $('.groups').hide();
+                        }
+                        else if (data.TouristType == '2') {
+                            //range = data.TouristRange1 + '~' + data.TouristRange2;
+                            type = '團體';
+                            $('.groups').show();
+                        }
+                        var code = '0000' + data.SN;
+                        code = code.substr(code.length - 5, 5);
+                        //var state = '';
+                        //if (data.VerifyDate)
+                        //    state = '已認證';
+
+                        $('#td1 .readData').text(code);
+                        var d = moment(data.ReservationBegin);
+                        var t = "上午";
+                        if (d.hours() >= 12)
+                            t = "下午";
+                        $('#td2 .readData').text(d.format("YYYY-MM-DD") + " " + t);
+                        //$('#td3').text(state);
+                        $('#td3 .readData').text((data.StateCodeName || ''));
+                        $('#td4 .readData').text(type);
+                        //$('#td5').text(range);
+                        $('#td5 .readData').text(data.TouristRange1);
+                        $('#td6 .readData').text((data.GroupName || ''));
+                        $('#td7 .readData').text((data.GroupTypeName || ''));
+                        $('#td8 .readData').text((data.ContactName || ''));
+                        $('#td9 .readData').text((data.ContactMobile || ''));
+                        $('#td10 .readData').text((data.ContactEmail || ''));
+                        $('#td11 .readData').text(data.ContactNote || '');
+                        $('#td12 .readData').text(moment(data.CreateDate).format("YYYY-MM-DD"));
+                        $('#td13 .readData').text(data.ModifyDate ? moment(data.ModifyDate).format("YYYY-MM-DD HH:mm") : '');
+                        //$('#td14').text(data.TouristNo || '');
+
+                        $('#td14').text(data.TouristNo != null ? data.TouristNo : '');
+                        $('#td15').text(data.Note || '');
+                        //$('#TouristNo').val(data.TouristNo);
+                        //$('#Note').val(data.Note);
+                        $('#tdTourNo').text(data.TourNo || '');
+                        $('#tdTourLeader').text(data.TourLeader || '');
+                        $('#tdTourGuide').text(data.TourGuide || '');
+                        $('#tdTourField').text(data.TourField || '');
+
+                        $('#SN').val(data.SN);
+                        $('#ID').val(data.ID);
+
+                        $('#TDNationForeigner').text(data.NationForeigner || '');
+                        $('#TDNationNative').text(data.NationNative || '');
+
+                        $('#TDMemberGov').text(data.MemberGov || '');
+                        $('#TDMemberNGO').text(data.MemberNGO || '');
+                        $('#TDMemberEdu').text(data.MemberEdu || '');
+                        $('#TDMemberOther').text(data.MemberOther || '');
+
+                        $('#ReservationBegin').val(moment(data.ReservationBegin));
+
+                        $('#tdAuth').text(data.AuthDate ? moment(data.AuthDate).format("YYYY-MM-DD") : '');
+
+
+                        rowStateCode = data.StateCode;
+
+                        if (data.StateCode == '20') {
+                            $('#BTCancel').text('取消預約');
+                            $('#BTCancel').removeClass('btn-primary');
+                            $('#BTCancel').addClass('btn-danger');
+
+                            $('#BTAuth').prop('disabled', false);
+                        }
+                        else {
+                            $('#BTCancel').text('認證預約');
+                            $('#BTCancel').removeClass('btn-danger');
+                            $('#BTCancel').addClass('btn-primary');
+
+                            //$('#BTAuth').attr('disabled', 'disabled');
+                            $('#BTAuth').prop('disabled', true);
+                        }
+
+
+
+
+
+                        //var html =
+                        //    '<dt>預約代碼：</dt><dd>' + sn + '</dd>' +
+                        //    '<dt>預約日期：</dt><dd>' +  + '</dd>' +
+                        //    '<dt>預約時段：</dt><dd>' + moment(data.ReservationBegin).format("HH:mm") + '~' + moment(data.ReservationEnd).format("HH:mm") + '</dd>' +
+                        //    '<dt>參觀人數：</dt><dd>' + range + '</dd>' +
+                        //    group +
+                        //    '<dt>聯絡人姓名：</dt><dd>' + data.ContactName + '</dd>' +
+                        //    '<dt>行動電話：</dt><dd>' + data.ContactMobile + '</dd>' +
+                        //    '<dt>電子郵件：</dt><dd>' + data.ContactEmail + '</dd>' +
+                        //    '<dt>備註：</dt><dd>' + (data.ContactNote || '') + '</dd>'
+                        //;
+
+                    } else {
+                        alert("查無資料");
+                    }
+
+                }).fail(function () {
+                    alert("系統錯誤！");
+                });
+            }
+
+            //ListAll();
+            function ListAll() {
+                $.ajax({
+                    url: 'ListAll',
+                    dataType: 'json',
+                    type: 'POST'
+                }).done(function (data) {
+                    var rows = new Array();
+                    $.each(data, function (key, value) {
+                        /*
+                        var row = new Array();
+                        var code = '0000' + value.SN;
+                        row.push('<button type="button" class="btn btn-primary btn-xs SN">' + code.substr(code.length - 5) + '</button>');
+                        //row.push(moment(value.ReservationBegin).format("YYYY-MM-DD") + ' ' + moment(value.ReservationBegin).format("HH:mm") + '~' + moment(value.ReservationEnd).format("HH:mm"));
+
+                        var d = moment(value.ReservationBegin);
+                        var t = "上午";
+                        if (d.hours() >= 12)
+                            t = "下午";
+                        row.push(d.format("YYYY-MM-DD") + ' ' + t);
+                        //if (value.VerifyDate)
+                        //    row.push("已認證");
+                        //else
+                        //    row.push("");
+
+                        //var name = (value.StateCodeName || '新登錄');                    
+                        var name = value.StateCodeName;
+                        row.push(name);
+
+                        var touristTypeName = '';
+                        //var range = '';
+                        if (value.TouristType == '1') {
+                            touristTypeName = "個人";
+                            //range = value.TouristRange1;
+                        }
+                        else if (value.TouristType == '2') {
+                            touristTypeName = "團體";
+                            //range = value.TouristRange1 + '~' + value.TouristRange2;
+                        }
+                        row.push(touristTypeName);
+                        row.push(value.ContactName || '');
+                        //row.push((value.TouristRange1 || '') + (value.TouristRange2 ? '~' + value.TouristRange2 : ''));
+                        //row.push(range);
+                        row.push(value.TouristRange1);
+                        var groupName = '';
+                        if (value.GroupName)
+                            groupName = value.GroupName + ":";
+                        //row.push(value.ContactMobile || '');
+                        //row.push(value.ContactEmail || '');
+                        //row.push(value.ContactNote || '');
+                        //row.push(moment(value.CreateDate).format("YYYY-MM-DD"));
+                        row.push(value.TouristNo);
+                        rows.push(row);
+                        */
+                        rows.push(GetTableRow(value));
+                    });
+                    DataTableJS(rows);
+                });
+            }
+
+            var table1;
+            function DataTableJS(data) {
+                table1 = $('#tableJS').dataTable({
+                    "aaData": data,
+                    "aoColumns": [
+                        { "sTitle": "代碼", "sClass": "colSN", "sWidth": "90px" },
+                        //{ "sTitle": "預約日期", "sWidth": "180px" },
+                        { "sTitle": "預約日期" },
+                        { "sTitle": "狀態", "sClass": "colSN colState", "sWidth": "90px" },
+                        { "sTitle": "核准日期" },
+                        //{ "sTitle": "類型", "sClass": "colSN" },
+                        { "sTitle": "團體" },
+                        { "sTitle": "聯絡人" },
+                        { "sTitle": "預約人數", "sClass": "colSN" },
+                        { "sTitle": "實際人數", "sClass": "colSN" }
+                        //{ "sTitle": "行動電話" },
+                        //{ "sTitle": "電子郵件" },
+                        //{ "sTitle": "備註" },
+                        //{ "sTitle": "登錄日期", "iDataSort": 1 }
+                    ],
+                    //"aaSorting": [[0, 'desc']],
+                    "aaSorting": [[1, 'desc']],
+                    //"bJQueryUI": true,
+                    //"asStripeClasses": ['gradeA even', 'gradeA odd'],
+                    "sPaginationType": "full_numbers",
+                    //"sAjaxSource": "TenderLink.ashx",
+                    "oLanguage": {
+                        "sLengthMenu": "每頁顯示筆數： _MENU_ ",
+                        "sZeroRecords": "無資料",
+                        "sInfo": "本頁資料：第 _START_ 至第 _END_ 筆 , 共 _TOTAL_ 筆",
+                        //"sInfoEmpty": "Showing 0 to 0 of 0 records",
+                        "sInfoEmpty": "無資料",
+                        "sInfoFiltered": "(已篩選 , 總筆數 _MAX_)",
+                        "sSearch": "篩選：",
+                        "sProcessing": "處理中......",
+                        "oPaginate": {
+                            "sFirst": "首頁",
+                            "sPrevious": "上頁",
+                            "sNext": "下頁",
+                            "sLast": "末頁"
+                        }
+                    }
+                });
+
+                //$.fn.dataTableExt.oStdClasses.sSortColumn = "aaa";
+                //$.fn.dataTableExt.oJUIClasses.sSortColumn = "aaa";
+
+                $('#tableJS_filter').append(' <input id="CBCancel" type="checkbox" /> <label for="CBCancel" class="CBCancel">顯示取消記錄</label>');
+                table1.fnFilter('新登錄|已認證', 2, true, true);
+
+                $('#CBCancel').click(function () {
+                    if ($('#CBCancel:checked').length == 1)
+                        table1.fnFilter('', 2);
+                    else
+                        table1.fnFilter('新登錄|已認證', 2, true, true);
+                });
+            }
+
+            $('#BTSave').click(function () {
+                SetData();
+            });
+            function SetData() {
+                var no;
+                if ($('#TouristNo').val().replace(/\s/g, '').length == 0)
+                    no = null;
+                else {
+                    no = Number($('#TouristNo').val());
+                    if (isNaN(no) || no < 0) {
+                        alert('請輸入正確人數！');
+                        return;
+                    }
+                }
+
+                var NationForeigner = Number($('#NationForeigner').val());
+                var NationNative = Number($('#NationNative').val());
+                var MemberGov = Number($('#MemberGov').val());
+                var MemberNGO = Number($('#MemberNGO').val());
+                var MemberEdu = Number($('#MemberEdu').val());
+                var MemberOther = Number($('#MemberOther').val());
+
+                var TourNo = $('#TourNo').val().replace(/\s/g, '');
+                var TourLeader = $('#TourLeader').val().replace(/\s/g, '');
+                var TourGuide = $('#TourGuide').val().replace(/\s/g, '');
+                var TourField = $('#TourField').val().replace(/\s/g, '');
+
+                var note = $('#Note').val();
+                var id = $('#ID').val();
+                $.ajax({
+                    url: 'UpdateReservation',
+                    dataType: 'json',
+                    data: {
+                        id: id,
+                        touristNo: no,
+                        note: note,
+                        NationForeigner: NationForeigner,
+                        NationNative: NationNative,
+                        MemberGov: MemberGov,
+                        MemberNGO: MemberNGO,
+                        MemberEdu: MemberEdu,
+                        MemberOther: MemberOther,
+                        TourNo: TourNo,
+                        TourLeader: TourLeader,
+                        TourGuide: TourGuide,
+                        TourField: TourField
+                    },
+                    type: 'POST'
+                }).done(function (data) {
+                    if (data.toString() == '1') {
+                        GetRowData($('#SN').val());
+                        UpdateTableRow();
+                    }
+                    else {
+                        alert('設定失敗！');
+                    }
+                    $('#setModal').modal('hide');
+                }
+                ).error(function () {
+                    alert("error!");
+                });
+            }
+
+
+            $('#BTEdit').click(function () {
+                $('#TouristNo').val($('#td14').text());
+                $('#Note').val($('#td15').text());
+
+                $('#NationForeigner').val($('#TDNationForeigner').text());
+                $('#NationNative').val($('#TDNationNative').text());
+                $('#MemberGov').val($('#TDMemberGov').text());
+                $('#MemberNGO').val($('#TDMemberNGO').text());
+                $('#MemberEdu').val($('#TDMemberEdu').text());
+                $('#MemberOther').val($('#TDMemberOther').text());
+
+                $('#TourNo').val($('#tdTourNo').text());
+                $('#TourLeader').val($('#tdTourLeader').text());
+                $('#TourGuide').val($('#tdTourGuide').text());
+                $('#TourField').val($('#tdTourField').text());
+
+                $('#setModal').modal();
+            });
+
+            $('#BTDate').click(function () {
+                $('#dateModal').modal();
+            });
+
+            $('#NationForeigner').change(function () {
+                var no = Number($('#TouristNo').val());
+                var NationForeigner = Number($('#NationForeigner').val());
+                if (!isNaN(no) && !isNaN(NationForeigner)) {
+                    $('#NationNative').val(no - NationForeigner);
+                }
+            });
+            $('#NationNative').change(function () {
+                var no = Number($('#TouristNo').val());
+                var NationNative = Number($('#NationNative').val());
+                if (!isNaN(no) && !isNaN(NationNative)) {
+                    $('#NationForeigner').val(no - NationNative);
+                }
+            });
+
+            $('#MemberGov').change(function () {
+                MemberChange();
+            });
+            $('#MemberNGO').change(function () {
+                MemberChange();
+            });
+            $('#MemberEdu').change(function () {
+                MemberChange();
+            });
+            function MemberChange() {
+                var no = Number($('#TouristNo').val());
+                var MemberGov = Number($('#MemberGov').val());
+                var MemberNGO = Number($('#MemberNGO').val());
+                var MemberEdu = Number($('#MemberEdu').val());
+                if (!isNaN(no) && !isNaN(MemberGov) && !isNaN(MemberNGO) && !isNaN(MemberEdu)) {
+                    var other = no - MemberGov - MemberNGO - MemberEdu;
+                    if (other > 0)
+                        $('#MemberOther').val(other);
+                    else
+                        $('#MemberOther').val('');
+                }
+            }
+
+            $('#BTCancel').click(function () {
+                var id = $('#ID').val();
+                var sn = $('#SN').val();
+
+                if (rowStateCode == '20') {
+                    if (confirm('確定「取消」本次預約？')) {
+                        $.ajax({
+                            url: 'CancelReservation',
+                            dataType: 'json',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST'
+                        }).done(function (rows) {
+                            GetRowData(sn);
+                            //$('#BTCancel').attr('disabled', 'disabled');                            
+                            $('#BTCancel').text('認證預約');
+                            $('#BTCancel').removeClass('btn-danger');
+                            $('#BTCancel').addClass('btn-primary');
+                            //colState.text('已取消');//not complete!
+                            UpdateTableRow();
+                            alert('取消成功！');
+                        }).fail(function () {
+                            alert("error!");
+                        });
+                    }
+                } else {
+                    if (confirm('確定「認證」本次預約？')) {
+                        $.ajax({
+                            url: 'VerifyReservation',
+                            dataType: 'json',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST'
+                        }).done(function (rows) {
+                            GetRowData(sn);
+                            $('#BTCancel').text('取消預約');
+                            $('#BTCancel').removeClass('btn-primary');
+                            $('#BTCancel').addClass('btn-danger');
+                            //colState.text('已認證');
+                            UpdateTableRow();
+                            alert('認證成功！');
+                        }).fail(function () {
+                            alert("error!");
+                        });
+                    }
+                }
+            });
+
+            function GetTableRow(value) {
+                var row = new Array();
+                var code = '0000' + value.SN;
+                row.push('<button type="button" class="btn btn-primary btn-xs SN">' + code.substr(code.length - 5) + '</button>');
+                var d = moment(value.ReservationBegin);
+                var t = "上午";
+                if (d.hours() >= 12)
+                    t = "下午";
+                row.push(d.format("YYYY-MM-DD") + ' ' + t);
+
+                var name = value.StateCodeName;
+                row.push(name);
+
+                if (value.AuthDate) {
+                    row.push(moment(value.AuthDate).format("YYYY-MM-DD"));
+                } else {
+                    row.push('');
+                }
+
+                //var touristTypeName = '';
+                //if (value.TouristType == '1') {
+                //    touristTypeName = "個人";
+                //}
+                //else if (value.TouristType == '2') {
+                //    touristTypeName = "團體";
+                //}
+                //row.push(touristTypeName);
+
+                row.push(value.GroupName || '');
+
+                row.push(value.ContactName || '');
+                row.push(value.TouristRange1);
+                var groupName = '';
+                if (value.GroupName)
+                    groupName = value.GroupName + ":";
+                row.push(value.TouristNo);
+                //rows.push(row);
+
+                return row;
+            }
+
+            function UpdateTableRow() {
+                var sn = $('#SN').val();
+                if (aPos > -1 && sn > 0) {
+                    //alert(aPos + ',' + sn);
+                    $.ajax({
+                        url: 'ListAllOne',
+                        dataType: 'json',
+                        data: {
+                            sn: sn
+                        },
+                        type: 'POST'
+                    }).done(function (data) {
+                        if (data.length == 1) {
+                            var row = GetTableRow(data[0]);
+                            table1.fnUpdate(row, aPos);
+                        }
+                    });
+                }
+            }
+
+
+            $('#BTAuth').click(function () {
+                if (confirm('確定發出核准通知信件？')) {
+                    var id = $('#ID').val();
+                    var sn = $('#SN').val();
+                    $.ajax({
+                        url: 'AuthReservation',
+                        dataType: 'json',
+                        data: {
+                            id: id
+                        },
+                        type: 'POST'
+                    }).done(function (data) {
+                        if (data == '1') {
+                            GetRowData(sn);
+                            UpdateTableRow();
+                            alert('通知成功！');
+                        } else {
+                            alert('通知郵件發送失敗！請稍後再試。');
+                        }
+                    }).fail(function () {
+                        alert("error!");
+                    });
+                }
+            });
+        });
+    </script>
+}

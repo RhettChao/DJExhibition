@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+<div id="div1">Hello</div>
+<button id="BTTest" type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-hand-up"></span> TEST</button>
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $('#BTTest').click(function () {
+            $('#div1').css('height', '3000px');
+        });
+    });
+</script>
+}

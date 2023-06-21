@@ -1,0 +1,59 @@
+﻿@model Exhibition.Models.Reservation
+@{
+    ViewBag.Title = "預約完成";
+}
+
+<div class="container">
+    <p class="text-center">
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">1.選擇身份/人數</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">2.選擇日期/時段</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">3.填寫基本資料</button>
+        <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">4.電子郵件認證</button>
+        @*<button type="button" class="btn btn-lg btn-success btStep">5.預約完成</button>*@
+        <button type="button" class="btn btn-lg btn-success btStep">5.認證成功</button>
+    </p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>
+                @*<span class="label label-primary">認證已完成！</span>*@
+                電子郵件認證成功，進入審核程序，待管理者確認後將另行通知！
+            </h2>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>預約代碼：</dt>                
+                <dd>@ViewBag.ReservationCode</dd>
+                <dt>預約日期：</dt>
+                @*<dd>@String.Format("{0:yyyy-MM-dd}", Model.ReservationBegin)</dd>*@
+                <dd>@String.Format("{0}{1:-MM-dd}", Model.ReservationBegin.Value.Year - 1911, Model.ReservationBegin)</dd>
+                <dt>預約時段：</dt>
+                <dd>@String.Format("{0:HH:mm} ~ {1:HH:mm}", Model.ReservationBegin, Model.ReservationEnd)</dd>
+                <dt>參觀人數：</dt>
+                @*<dd>@ViewBag.TouristRange</dd>*@
+                <dd>@Model.TouristRange1</dd>
+                <dt class="groupName">團體名稱：</dt>
+                <dd class="groupName">@Html.DisplayTextFor(m => m.GroupName)</dd>
+                <dt>聯絡人姓名：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactName)</dd>
+                <dt>行動電話：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactMobile)</dd>
+                <dt>電子郵件：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactEmail)</dd>
+                <dt>備註：</dt>
+                <dd>@Html.DisplayTextFor(m => m.ContactNote)</dd>
+            </dl>            
+            
+            <h3>(請記住您的預約代碼，以便查詢與報到)</h3>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var groupName = '@Model.GroupName';
+            if (groupName.length == 0) {
+                $('.groupName').hide();
+            }
+        });
+    </script>
+}

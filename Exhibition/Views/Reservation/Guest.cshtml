@@ -1,0 +1,337 @@
+﻿@{
+    ViewBag.Title = "訪客統計";
+}
+@section Styles {
+    <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    @*<link href="~/Content/jquery.dataTables/1.9.4/jquery.dataTables.css" rel="stylesheet" />*@
+
+    <link rel="stylesheet" href="~/Content/daterangepicker-bs3.css">
+    <style>
+        th {
+            text-align: center;
+        }
+        tr {
+            text-align: center;
+        }
+        tbody {
+            font-size: 1.1em;
+        }
+        .TDPre {
+            background-color: #D7D7D7;
+        }
+        .TDAct {
+            background-color: #9AD39A;
+        }
+        .TDNation {
+            /*background-color:#5bc0de;*/
+            background-color: #A2DBEC;
+        }
+        .TDMember {
+            /*background-color:#ed9c28;*/
+            background-color: #F4C782;
+        }
+        #form1 {
+            margin-top: 30px;        
+            margin-bottom:10px;    
+        }
+        tr div {
+            margin-top: 6px;            
+            font-size: 1.2em;
+        }
+    </style>
+}
+<h2 class="text-center">訪客統計</h2>
+
+@*<table class="table" id="tableJS">
+    <thead>
+        <tr>
+            <th>預約人數</th>
+            <th>實際人數</th>
+            <th>本國人數</th>
+            <th>外籍人數</th>
+            <th>政府機關</th>
+            <th>民間團體</th>
+            <th>學術組織</th>
+            <th>其他</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td id="TDTouristRange1" class="TDPre"></td>
+            <td id="TDTouristNo" class="TDAct"></td>
+            <td id="TDNationForeigner" class="TDNation"></td>
+            <td id="TDNationNative" class="TDNation"></td>
+            <td id="TDMemberGov" class="TDMember"></td>
+            <td id="TDMemberNGO" class="TDMember"></td>
+            <td id="TDMemberEdu" class="TDMember"></td>
+            <td id="TDMemberOther" class="TDMember"></td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="8" class="text-center">(以上不含已取消之預約記錄)</td>
+        </tr>
+    </tfoot>
+</table>*@
+
+
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>預約人數</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>*@
+
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <form class="bs-example form-inline add text-right" role="form" id="form1">
+            @*<div class="form-group">                
+                <input type="text" class="form-control" id="dateBegin" placeholder="開始日期(yyyy-mm-dd)" required title="請輸入開始日期！">
+            </div>
+            <div class="form-group">                
+                <input type="text" class="form-control" id="dateEnd" placeholder="結束日期(yyyy-mm-dd)" required title="請輸入結束日期！">
+            </div>*@
+            <div class="form-group">
+                @*<input type="text" name="dateRange" id="dateRange" value="03/18/2013 - 03/23/2013" />*@
+                <div id="dateRange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                    <span class="label label-primary">統計區間</span>
+                    <i class="glyphicon glyphicon-calendar icon-calendar icon-large"></i>
+                    <span id="spanRange"></span><b class="caret"></b>
+                </div>
+            </div>
+            @*<div class="form-group">
+                <button type="submit" class="btn btn-primary" id="BTQuery">區間查詢</button>
+            </div>*@
+        </form>
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <td>預約人數<div id="TDTouristRange1">&nbsp;</div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @*        <tr>
+            <td id="TDTouristRange1">0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>*@
+                <tr>
+                    <td>實際人數<div id="TDTouristNo">&nbsp;</div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @*<tr>
+            <td id="TDTouristNo">0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>*@
+                <tr>
+                    <td>本國人數<div id="TDNationNative">&nbsp;</div>
+                    </td>
+                    <td>外籍人數<div id="TDNationForeigner">&nbsp;</div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @* <tr>
+            <td id="TDNationForeigner">0</td>
+            <td id="TDNationNative">0</td>
+            <td></td>
+            <td></td>
+        </tr>*@
+                <tr>
+                    <td>政府機關<div id="TDMemberGov">&nbsp;</div>
+                    </td>
+                    <td>民間團體<div id="TDMemberNGO">&nbsp;</div>
+                    </td>
+                    <td>學術組織<div id="TDMemberEdu">&nbsp;</div>
+                    </td>
+                    <td>其他<div id="TDMemberOther">&nbsp;</div>
+                    </td>
+                </tr>
+                @* <tr>
+            <td id="TDMemberGov">0</td>
+            <td id="TDMemberNGO">0</td>
+            <td id="TDMemberEdu">0</td>
+            <td id="TDMemberOther">0</td>            
+        </tr>*@
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-center">(以上不含已取消之預約記錄)</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+<div class="row text-center"></div>
+
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+{
+    @Html.AntiForgeryToken()
+    <h2 class="label label-success">@ViewBag.User </h2>
+    <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary btn-xs">登出</a>
+}
+
+@section Scripts {
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    @*<script src="http://momentjs.com/downloads/moment.min.js"></script>*@
+    @Scripts.Render("~/Scripts/moment.min.js")
+    @Scripts.Render("~/Scripts/daterangepicker.js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //alert(moment().startOf('week').add('d', 1));
+            //alert(moment().startOf('week').add('d', 5));
+            $("#form1").validate({
+                showErrors: function (errorMap, errorList) {
+                    // Clean up any tooltips for valid elements
+                    $.each(this.validElements(), function (index, element) {
+                        var $element = $(element);
+
+                        $element.data("title", "") // Clear the title - there is no error associated anymore
+                            .removeClass("error")
+                            .tooltip("destroy");
+                    });
+
+                    // Create new tooltips for invalid elements
+                    $.each(errorList, function (index, error) {
+                        var $element = $(error.element);
+
+                        $element.tooltip("destroy") // Destroy any pre-existing tooltip so we can repopulate with new tooltip content
+                            .data("title", error.message)
+                            .addClass("error")
+                            .tooltip(); // Create a new tooltip based on the error messsage we just set in the title
+                    });
+                },
+                submitHandler: function (form) {
+                    //Query();
+                    //form.submit();
+                    AddDate();
+                }
+            });
+
+            var statDateBegin = moment('2013/10/1');
+            var statDateEnd = moment().add('days', 60);
+            GetData(statDateBegin.format('YYYY/MM/DD'), statDateEnd.format('YYYY/MM/DD'));
+
+            function GetData(begin, end) {
+                $('#TDTouristRange1').html('&nbsp;');
+                $('#TDTouristNo').html('&nbsp;');
+                $('#TDNationForeigner').html('&nbsp;');
+                $('#TDNationNative').html('&nbsp;');
+                $('#TDMemberGov').html('&nbsp;');
+                $('#TDMemberNGO').html('&nbsp;');
+                $('#TDMemberEdu').html('&nbsp;');
+                $('#TDMemberOther').html('&nbsp;');
+                $.ajax({
+                    url: 'GuestData',
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {
+                        dateBegin: begin,
+                        dateEnd: end
+                    }
+                }).done(function (data) {
+                    $('#TDTouristRange1').text('0');
+                    $('#TDTouristNo').text('0');
+                    $('#TDNationForeigner').text('0');
+                    $('#TDNationNative').text('0');
+                    $('#TDMemberGov').text('0');
+                    $('#TDMemberNGO').text('0');
+                    $('#TDMemberEdu').text('0');
+                    $('#TDMemberOther').text('0');
+                    if (data.length == 1) {
+                        $('#TDTouristRange1').text((data[0].SumTouristRange1 || 0));
+                        $('#TDTouristNo').text((data[0].SumTouristNo || 0));
+                        $('#TDNationForeigner').text((data[0].SumNationForeigner || 0));
+                        $('#TDNationNative').text((data[0].SumNationNative || 0));
+                        $('#TDMemberGov').text((data[0].SumMemberGov || 0));
+                        $('#TDMemberNGO').text((data[0].SumMemberNGO || 0));
+                        $('#TDMemberEdu').text((data[0].SumMemberEdu || 0));
+                        $('#TDMemberOther').text((data[0].SumMemberOther || 0));
+                    }
+                }).error(function () {
+                    alert("error!");
+                });
+            }
+
+            $('#dateRange').daterangepicker(
+                     {
+                         //startDate: moment().subtract('days', 29),
+                         startDate:statDateBegin,
+                         endDate: statDateEnd,
+                         minDate: statDateBegin,
+                         maxDate: statDateEnd,
+                         //dateLimit: { days: 60 },
+                         showDropdowns: true,
+                         showWeekNumbers: false,
+                         //timePicker: false,
+                         //timePickerIncrement: 1,
+                         //timePicker12Hour: true,
+                         ranges: {
+                             '今日': [moment(), moment()],
+                             '昨日': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                             '本週': [moment().startOf('week'), moment().endOf('week')],
+                             //'過去7天': [moment().subtract('days', 6), moment()],                             
+                             '本月份': [moment().startOf('month'), moment().endOf('month')],
+                             '上月份': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                             '過去30天': [moment().subtract('days', 29), moment()]
+                         },
+                         opens: 'left',
+                         buttonClasses: ['btn btn-default'],
+                         applyClass: 'btn-small btn-primary',
+                         cancelClass: 'btn-small',
+                         //format: 'MM/DD/YYYY',
+                         format: 'YYYY/MM/DD',
+                         separator: ' to ',
+                         locale: {
+                             applyLabel: '確定',
+                             cancelLabel: '取消',
+                             fromLabel: '開始',
+                             toLabel: '結束',
+                             customRangeLabel: '自訂區間',
+                             daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                             monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                             firstDay: 0
+                         }
+                     },
+                     function (start, end) {
+                         GetData(start.format('YYYY/MM/DD'), end.format('YYYY/MM/DD'));
+
+                         //console.log("Callback has been called!");
+                         //$('#spanRange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));                         
+                         $('#spanRange').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+                     }
+                  );
+            //Set the initial state of the picker label
+            //$('#spanRange').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+
+            $('#spanRange').html(statDateBegin.format('YYYY/MM/DD') + ' - ' + statDateEnd.format('YYYY/MM/DD'));
+        });
+    </script>
+}
+
+
+

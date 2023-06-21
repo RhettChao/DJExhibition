@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Time";    
+}
+
+@section Styles {
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css">
+    <style>
+        .fc-event {
+            cursor:pointer
+        }
+        .divCalendar {
+            width:80%;
+        }
+        .btStep {
+            margin-bottom: 3px;
+        }
+    </style>
+}
+<form role="form" action="Contact" method="post" id="form1">
+    <div class="text-center">
+        <p>
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">1.選擇身份/人數</button>
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">2.選擇預約日期</button>
+            <button type="button" class="btn btn-lg btn-success btStep">3.選擇預約時段</button>
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">4.填寫基本資料</button>
+            <button type="button" class="btn btn-lg btn-success btStep" disabled="disabled">5.預約完成</button>
+        </p>
+        @*<h2>請選擇參觀時段</h2>*@
+        <div class="container divCalendar">
+            <div id='calendar' style='margin: 3em 0; font-size: 13px' ></div>
+        </div>
+        <p>
+            <button type="button" class="btn btn-lg btn-primary" id="BTPrev">&laquo; 上一步</button>
+            <button type="button" class="btn btn-lg btn-primary" id="BTNext" title="請點選參觀時段！">下一步 &raquo;</button>
+            @*<a class="btn btn-lg btn-primary" href="~/Reservation/Date">&laquo; 上一步</a>
+            <a class="btn btn-lg btn-primary" href="~/Reservation/Contact">下一步 &raquo;</a>*@
+        </p>
+    </div>
+    <input type="hidden" value="@ViewBag.TouristType" name="TouristType" id="TouristType" />
+    <input type="hidden" value="@ViewBag.TouristRange1" name="TouristRange1" id="TouristRange1" />
+    <input type="hidden" value="@ViewBag.TouristRange2" name="TouristRange2" id="TouristRange2" />
+    <input type="hidden" value="@ViewBag.ReservationBegin" name="ReservationBegin" id="ReservationBegin" />
+    <input type="hidden" value="@ViewBag.ReservationEnd" name="ReservationEnd" id="ReservationEnd" />
+</form>
+@section Scripts {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js"></script>
+    <script type="text/javascript">
+        var requestDateStr = '@ViewBag.RequestDate';
+        
+        $(document).ready(function () {
+            $('#BTPrev').click(function () {
+                $('#form1').attr('action', 'Date');
+                $('#form1').submit();
+            });
+            $('#BTNext').click(function () {
+                if ($('#ReservationBegin').val() == '' || $('#ReservationEnd').val() == '') {
+                    $('#BTNext').tooltip('show');
+                } else {
+                    $('#form1').attr('action', 'Contact');
+                    $('#form1').submit();
+                }
+            });
+
+            var calendarSource = '';
+            var touristType = '@ViewBag.TouristType';
+            if (touristType == '1')
+                calendarSource = '../CalendarFeed/IndividualDayOpen?date=' + requestDateStr + '&touristNo=@ViewBag.TouristRange2';
+            else if (touristType == '2')
+                calendarSource = '../CalendarFeed/GroupDayOpen?date=' + requestDateStr + '&touristNo=@ViewBag.TouristRange2';
+            
+            var calDate = new Date(requestDateStr);
+            
+            $('#calendar').fullCalendar({
+                theme: false,
+                allDaySlot: false,
+                allDayText: '全日',
+                axisFormat: 'h:mm tt',
+                titleFormat: {
+                    day: 'yyyy-MM-dd dddd'                  // Tuesday, Sep 8, 2009
+                },
+                dayNames:
+                    ['星期日', '星期一', '星期二', '星期三',
+                    '星期四', '星期五', '星期六']
+                ,
+                header: {
+                    left: '',
+                    center: 'title',
+                    right: ''
+                },
+                columnFormat: {
+                    day: ''
+                },
+                defaultView: 'agendaDay',
+                minTime: '8:00',
+                maxTime: '17:00',
+                editable: false,
+                eventClick: function (calEvent, jsEvent, view) {                    
+                    if (view.name == 'agendaDay') {
+                        $('#BTNext').tooltip('destroy');
+                        var dateStrBegin = calEvent.start.getFullYear() + '-' + (calEvent.start.getMonth() + 1) + '-' + calEvent.start.getDate() + " " + calEvent.start.getHours() + ":" + calEvent.start.getMinutes();                        
+                        var dateStrEnd = calEvent.end.getFullYear() + '-' + (calEvent.end.getMonth() + 1) + '-' + calEvent.end.getDate() + " " + calEvent.end.getHours() + ":" + calEvent.end.getMinutes();
+
+                        if (dateStrBegin == $('#ReservationBegin').val())
+                            return;
+
+                        $('#ReservationBegin').val(dateStrBegin);
+                        $('#ReservationEnd').val(dateStrEnd);
+
+                        if ($(this).css('background-color') != 'red') {
+                            $('.fc-event').css('background-color', $(this).css('background-color'));
+                            $(this).css('background-color', 'red');
+                        }
+
+                        //if (dateStrBegin == $('#ReservationBegin').val())
+                        //    return;
+                        //$('.fc-event').css('background-color', $(this).css('background-color'));
+                        //$(this).css('background-color', 'red');
+                    }
+                }
+                ,                
+                eventSources: [
+                    //'../CalendarFeed/IndividualDayOpen?date=' + requestDateStr + "&touristNo=@ViewBag.TouristRange2"
+                    calendarSource
+                ]
+            }).fullCalendar('gotoDate', calDate);
+        });
+    </script>
+}

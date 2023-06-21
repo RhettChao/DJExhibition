@@ -1,0 +1,189 @@
+﻿@model IEnumerable<Reservation.Reservation>
+
+@{
+    ViewBag.Title = "List";
+
+}
+@section Styles {
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    <link href="//datatables.net/release-datatables/media/css/demo_table_jui.css" rel="stylesheet" />
+}
+<h2>預約清單</h2>
+<div id="div1"></div>
+<table class="display" id="tableJS">
+</table>
+@*<table class="table table-condensed table-striped table-hover" id="table1">
+    <thead>
+        <tr>
+            <th>SN
+            </th>
+            <th>預約日期
+            </th>
+            <th>時段
+            </th>
+            <th>預約類型
+            </th>
+            <th>人數
+            </th>
+            <th>聯絡人
+            </th>
+            <th>行動電話
+            </th>
+            <th>電子郵件
+            </th>
+            <th>備註
+            </th>
+            <th>登錄日期
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+
+
+    @foreach (var item in Model) { 
+    <tr> 
+        <td> 
+            @Html.DisplayFor(modelItem => item.SN) 
+        </td> 
+        <td>
+            @String.Format("{0:yyyy-MM-dd}",item.ReservationBegin)
+        </td> 
+        <td> 
+            @Html.DisplayFor(modelItem => item.TouristType)  @Html.DisplayFor(modelItem => item.TouristRange1)  @Html.DisplayFor(modelItem => item.TouristRange2)             
+        </td> 
+        <td> 
+            @Html.DisplayFor(modelItem => item.ContactName) 
+        </td>
+        <td> 
+            @Html.DisplayFor(modelItem => item.ContactMobile) 
+        </td>        
+        <td> 
+            @Html.DisplayFor(modelItem => item.ContactEmail) 
+        </td>
+        <td> 
+            @Html.DisplayFor(modelItem => item.ContactNote) 
+        </td>
+        <td> 
+            @Html.DisplayFor(modelItem => item.CreateDate) 
+        </td>
+    </tr> 
+}
+</table>*@
+
+@section Scripts {
+    @*<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>*@
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <script src="http://momentjs.com/downloads/moment.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: 'ListAll',
+                dataType: 'json',
+                type: 'POST'
+            }).done(function (data) {
+                var rows = new Array();
+
+                $.each(data, function (key, value) {
+                    var row = new Array();
+                    //row.push(value.SN);
+                    row.push(moment(value.ReservationBegin).format("YYYY-MM-DD"));
+                    row.push(moment(value.ReservationBegin).format("HH:mm") + '~' + moment(value.ReservationEnd).format("HH:mm"));
+                    row.push(value.TouristType || '');
+                    row.push((value.TouristRange1 || '') + (value.TouristRange2 ? '~' + value.TouristRange2 : ''));
+                    row.push(value.ContactName || '');
+                    row.push(value.ContactMobile || '');
+                    row.push(value.ContactEmail || '');
+                    row.push(value.ContactNote || '');
+                    row.push(moment(value.CreateDate).format("YYYY-MM-DD"));
+                    rows.push(row);
+                });
+
+                DataTableJS(rows);
+                //$.each(data, function (key, value) {
+                //    //$('#div1').text($('#div1').text() +value.ContactName);
+                //    //var createDate = new Date(value.CreateDate);
+                //    //var reservationBegin = new Date(parseInt(value.ReservationBegin.substr(6)));
+                //    //var reservationEnd = new Date(parseInt(value.ReservationEnd.substr(6)));
+                //    //var createDate = new Date(parseInt(value.CreateDate.substr(6)));
+                //    var touristType = value.TouristType || '';
+                //    $('#table1').append('<tr>' +
+                //        '<td>' + value.SN + '</td>' +
+                //        //'<td>' + $.datepicker.formatDate('yy-mm-dd', reservationBegin) + '</td>' +
+                //        '<td>' + moment(value.ReservationBegin).format("YYYY-MM-DD") + '</td>' +
+                //        '<td>' + moment(value.ReservationBegin).format("HH:mm") + '~' + moment(value.ReservationEnd).format("HH:mm") + '</td>' +
+                //        '<td>' + (value.TouristType || '') + '</td>' +
+                //        '<td>' + (value.TouristRange1 || '') + (value.TouristRange2 ? '~' + value.TouristRange2 : '') + '</td>' +
+                //        '<td>' + (value.ContactName || '') + '</td>' +
+                //        '<td>' + (value.ContactMobile || '') + '</td>' +
+                //        '<td>' + (value.ContactEmail || '') + '</td>' +
+                //        '<td>' + (value.ContactNote || '') + '</td>' +                        
+                //        '<td>' + moment(value.CreateDate).format("YYYY-MM-DD") + '</td>' +
+                //        '</tr>');
+                //});
+            });
+
+
+            function DataTableJS(data) {
+                var table1 = $('#tableJS').dataTable({
+                    "aaData": data,
+                    //[
+                    //   /* Reduced data set */
+                    //   ["Trident", "Internet Explorer 4.0", "Win 95+", 4, "X"],
+                    //   ["Trident", "Internet Explorer 5.0", "Win 95+", 5, "C"],
+                    //   ["Trident", "Internet Explorer 5.5", "Win 95+", 5.5, "A"],
+                    //   ["Trident", "Internet Explorer 6.0", "Win 98+", 6, "A"],
+                    //   ["Trident", "Internet Explorer 7.0", "Win XP SP2+", 7, "A"],
+                    //   ["Gecko", "Firefox 1.5", "Win 98+ / OSX.2+", 1.8, "A"],
+                    //   ["Gecko", "Firefox 2", "Win 98+ / OSX.2+", 1.8, "A"],
+                    //   ["Gecko", "Firefox 3", "Win 2k+ / OSX.3+", 1.9, "A"],
+                    //   ["Webkit", "Safari 1.2", "OSX.3", 125.5, "A"],
+                    //   ["Webkit", "Safari 1.3", "OSX.3", 312.8, "A"],
+                    //   ["Webkit", "Safari 2.0", "OSX.4+", 419.3, "A"],
+                    //   ["Webkit", "Safari 3.0", "OSX.4+", 522.1, "A"]
+                    //],
+                    "aoColumns": [                        
+                        { "sTitle": "預約日期" },
+                        { "sTitle": "時段" },
+                        { "sTitle": "預約類型", "sClass": "center" },
+                        { "sTitle": "人數", "sClass": "center" },
+                        { "sTitle": "聯絡人" },
+                        { "sTitle": "行動電話" },
+                        { "sTitle": "電子郵件" },
+                        { "sTitle": "備註" },
+                        { "sTitle": "登錄日期" }                        
+                    ],
+                    "bJQueryUI": true,
+                    "asStripeClasses": ['gradeA even', 'gradeA odd']
+
+
+                    //"sAjaxSource": "TenderLink.ashx",
+                    //"aaData": data
+                    //,
+                    //"sPaginationType": "full_numbers",
+                    //"bJQueryUI": true,
+                    //"asStripeClasses": ['gradeA even', 'gradeA odd']
+
+                    //"oLanguage": {
+                    //    "sLengthMenu": "每頁顯示筆數： _MENU_ ",
+                    //    "sZeroRecords": "Nothing found ...",
+                    //    "sInfo": "本頁資料：第 _START_ 至第 _END_ 筆 , 共 _TOTAL_ 筆",
+                    //    "sInfoEmpty": "Showing 0 to 0 of 0 records",                        
+                    //    "sInfoFiltered": "(已篩選 , 總筆數 _MAX_)",
+                    //    "sSearch": "篩選：",
+                    //    "sProcessing": "處理中......",
+                    //    "oPaginate": {
+                    //        "sFirst": "首頁",
+                    //        "sPrevious": "上頁",
+                    //        "sNext": "下頁",
+                    //        "sLast": "末頁"
+                    //    }
+                    //}
+                });
+            }
+
+            
+        });
+    </script>
+
+}
